@@ -1,0 +1,27 @@
+{
+  "display_name": "Alex Example",
+  "display_name_overrides": [],
+  "atlassian_account_id": "test-alex-001",
+  "slack_user_id": "U_ALEX_TEST",
+  "github_username": "alex-example",
+  "email": "alex@example.test",
+  "slack_search_mode": "public",
+  "github": {
+    "orgs": [
+      "test-org"
+    ]
+  },
+  "ai_keywords": [
+    "Claude",
+    "Anthropic",
+    "CLAUDE.md",
+    "AI"
+  ],
+  "jira_ai_labels": [
+    "AI"
+  ],
+  "scan_claude_logs": true,
+  "claude_log_dir": "~/.claude/projects",
+  "cached_at": "2026-06-01",
+  "cache_source": "test_fixture"
+}

@@ -1,0 +1,32 @@
+{
+  "_comment": "Template only. Generate your real user.json via `init ai-weekly-update` — do not hand-edit.",
+  "display_name": "Alex Example",
+  "display_name_overrides": [],
+  "atlassian_account_id": "712020:REPLACE_WITH_YOUR_ATLASSIAN_ACCOUNT_ID",
+  "slack_user_id": "U00REPLACE",
+  "github_username": "alexexample",
+  "email": "alex.example@company.com",
+  "slack_search_mode": "public",
+  "github": {
+    "orgs": ["your-org"]
+  },
+  "ai_keywords": ["Claude", "Anthropic", "CLAUDE.md", "AI", "agent", "skill", "LLM"],
+  "jira_ai_labels": ["AI", "Claude"],
+  "scan_claude_logs": true,
+  "claude_log_dir": "~/.claude/projects",
+  "team": {
+    "_comment": "Optional. Present only if the user is a manager. When set, Phase 4 fans out searches to every member and the drafted Wins paragraph weaves in team activity. Leave absent/empty for IC use.",
+    "name": "Platform",
+    "members": [
+      {
+        "display_name": "Taylor Example",
+        "atlassian_account_id": "712020:REPLACE",
+        "slack_user_id": "U00REPLACE",
+        "github_username": "taylorexample",
+        "email": "taylor.example@company.com"
+      }
+    ]
+  },
+  "cached_at": "YYYY-MM-DD",
+  "cache_source": "example_template"
+}
