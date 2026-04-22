@@ -110,7 +110,7 @@ Every factual claim in the email must cite a Jira key, PR number, or a clear att
 
 ### Phase 5 — Render preview + draft file
 
-**Side effects:** writes `/tmp/ai-exec-report-<YYYY-MM-DD>.html` (preview) and `/tmp/ai-exec-report-<YYYY-MM-DD>.eml` (mail-client-openable draft).
+**Side effects:** writes `/tmp/ai-exec-report-<YYYY-MM-DD>.html` (preview) and `/tmp/ai-exec-report-<YYYY-MM-DD>.eml` (mail-client-openable draft). On macOS, also drives Outlook via AppleScript to open a real editable draft window.
 
 ```
 scripts/render_email.py \
@@ -118,17 +118,20 @@ scripts/render_email.py \
     --to <boss-email> --cc <comma-separated> \
     --from-name "<user display name>" --from-email "<user email>" \
     --out-html /tmp/ai-exec-report-<date>.html \
-    --out-eml /tmp/ai-exec-report-<date>.eml
+    --out-eml /tmp/ai-exec-report-<date>.eml \
+    --push-to-outlook     # macOS + Outlook users — see note below
 ```
 
 Open the HTML preview with `open <path>`.
 
+**Outlook for Mac caveat.** Double-clicking a `.eml` file in Outlook for Mac opens it as a **read-only viewer**, ignoring the `X-Unsent: 1` header that marks it as a draft. There is no Send button in that viewer. The `--push-to-outlook` flag drives Outlook's AppleScript API directly to create a real draft window (with Send button) in the user's running Outlook instance. The `.eml` and HTML files are still written as a paper-trail backup but are not the primary delivery path. Always pass `--push-to-outlook` when the user's default mail client is Outlook for Mac. Apple Mail users can omit it (Mail.app handles the `.eml` draft correctly).
+
 Tell the user:
-> Preview at `<html path>`. Mail-client draft at `<eml path>` — double-click that file to open in your default mail client with To/Subject/Body pre-filled.
+> Draft opened in Outlook with Send button. Preview at `<html path>` for reference.
 >
-> Reply `approve` to keep the draft (I'll leave the files in `/tmp/` for you to open).
-> Reply `edit <section>: <change>` to rewrite that section (I'll re-render).
-> Reply `cancel` to discard both files.
+> Reply `approve` — the draft stays open in Outlook; you click Send when ready.
+> Reply `edit <section>: <change>` to rewrite that section (I'll close the current draft and open a revised one).
+> Reply `cancel` to discard the Outlook draft and delete the local files.
 
 ### Phase 6 — Finalize on approval
 

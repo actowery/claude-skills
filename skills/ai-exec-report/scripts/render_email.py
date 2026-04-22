@@ -39,6 +39,9 @@ default mail handler) with all fields pre-filled as an editable draft.
 import argparse
 import html
 import json
+import shlex
+import shutil
+import subprocess
 import sys
 from datetime import datetime, timezone
 from email.message import EmailMessage
@@ -212,6 +215,64 @@ def render_eml(draft, from_name, from_email, to, cc):
     return msg
 
 
+# ---------- Outlook-for-Mac draft via AppleScript ----------
+
+def push_to_outlook(draft, to, cc):
+    """Create a real editable draft inside Outlook for Mac via its AppleScript API.
+
+    Outlook for Mac opens .eml files as read-only viewers (ignores X-Unsent),
+    so double-clicking the .eml never shows a Send button. Driving Outlook's
+    scripting dictionary directly produces a proper draft window with Send.
+
+    Returns True if the draft was created, False if osascript or Outlook
+    isn't available (caller falls back to the .eml path silently).
+    """
+    if not shutil.which("osascript"):
+        return False
+    # Check Outlook is installed before trying; lets callers run on Linux/CI.
+    if subprocess.run(["osascript", "-e", 'id of app "Microsoft Outlook"'],
+                      capture_output=True).returncode != 0:
+        return False
+
+    paras = assemble_body(draft)
+    subject = draft.get("subject") or "(no subject)"
+    # Outlook's `plain text content` collapses paragraph breaks into a single
+    # blob. Using `content` (HTML) preserves the paragraph structure — each
+    # <p>...</p> renders as its own block with the right spacing. This matters:
+    # a wall-of-text email to leadership undermines the whole point of the skill.
+    html_body = "".join(
+        f"<p>{html.escape(p)}</p>" for p in paras if p and p.strip()
+    )
+
+    def quote(s):
+        return s.replace("\\", "\\\\").replace('"', '\\"')
+
+    recipients_block = ""
+    for addr in to:
+        recipients_block += (
+            f'\n    make new recipient at newMsg with properties '
+            f'{{email address:{{address:"{quote(addr)}"}}}}'
+        )
+    for addr in cc:
+        recipients_block += (
+            f'\n    make new cc recipient at newMsg with properties '
+            f'{{email address:{{address:"{quote(addr)}"}}}}'
+        )
+
+    script = f'''
+tell application "Microsoft Outlook"
+    set newMsg to make new outgoing message with properties {{subject:"{quote(subject)}", content:"{quote(html_body)}"}}{recipients_block}
+    open newMsg
+    activate
+end tell
+'''
+    r = subprocess.run(["osascript", "-e", script], capture_output=True, text=True)
+    if r.returncode != 0:
+        print(f"warn: AppleScript-to-Outlook failed: {r.stderr.strip()}", file=sys.stderr)
+        return False
+    return True
+
+
 # ---------- CLI ----------
 
 def split_csv(s):
@@ -229,6 +290,10 @@ def main():
     p.add_argument("--from-email", required=True)
     p.add_argument("--out-html", required=True)
     p.add_argument("--out-eml", required=True)
+    p.add_argument("--push-to-outlook", action="store_true",
+                   help="Also drive Outlook for Mac via AppleScript to open a "
+                        "real editable draft (required on macOS — Outlook ignores "
+                        "the .eml's X-Unsent header and opens it as a viewer).")
     args = p.parse_args()
 
     draft = json.loads(Path(args.draft).read_text())
@@ -247,9 +312,14 @@ def main():
     html_path = Path(args.out_html)
     html_path.write_text(render_html(draft, args.from_name, args.from_email, to, cc, eml_path))
 
+    outlook_pushed = False
+    if args.push_to_outlook:
+        outlook_pushed = push_to_outlook(draft, to, cc)
+
     print(json.dumps({
         "html": str(html_path),
         "eml": str(eml_path),
+        "outlook_draft_opened": outlook_pushed,
         "to": to,
         "cc": cc,
         "subject": draft.get("subject", ""),
