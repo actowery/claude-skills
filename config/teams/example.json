@@ -1,0 +1,43 @@
+{
+  "_comment": "Template only. Generate your real <team-slug>.json via the init flow in SKILL.md — do not hand-edit.",
+  "team_name": "Platform",
+  "team_slug": "platform",
+  "team_lead_account_id": "712020:REPLACE_WITH_YOUR_ATLASSIAN_ACCOUNT_ID",
+  "team_lead_slack_id": "U00REPLACE",
+  "members": [
+    {
+      "display_name": "Alex Example",
+      "atlassian_account_id": "712020:REPLACE",
+      "slack_user_id": "U00REPLACE",
+      "github_username": "alexexample",
+      "email": "alex.example@company.com",
+      "confidence": "confirmed",
+      "signals": ["user_confirmed"]
+    }
+  ],
+  "jira_projects": ["PLAT", "API"],
+  "slack_channels": ["#platform", "#platform-standup"],
+  "slack_search_mode": "public",
+  "email_keywords": ["Platform", "API gateway", "Observability"],
+  "github": {
+    "orgs": ["your-org"],
+    "default_state": "merged"
+  },
+  "topic_map": {
+    "API gateway migration": {"labels": ["api-gw"], "epic": "PLAT-1234"},
+    "Observability roadmap": {"labels": ["observability"], "epic": null}
+  },
+  "page_layout": {
+    "team_only_row_labels": [
+      "product releases completed",
+      "releases",
+      "challenges",
+      "organization",
+      "hiring",
+      "resignations"
+    ],
+    "prompt_phrase_regex": "provide weekly updates"
+  },
+  "cached_at": "YYYY-MM-DD",
+  "cache_source": "example_template"
+}
