@@ -1,0 +1,25 @@
+# User config contains personal IDs / handles — each user generates their own.
+config/user.json
+
+# Local research cache from previous runs.
+.cache/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Secrets
+.env
+.env.*
+!.env.example
