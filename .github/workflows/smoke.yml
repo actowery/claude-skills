@@ -1,0 +1,65 @@
+name: smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Discover skill directories at runtime so adding a new skill doesn't
+  # require a workflow edit. A skill is any directory under skills/ that
+  # contains tests/smoke_test.py.
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      skills: ${{ steps.list.outputs.skills }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: list
+        run: |
+          skills=$(ls -d skills/*/ 2>/dev/null \
+            | xargs -I{} sh -c 'test -f {}tests/smoke_test.py && basename {}' \
+            | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "skills=$skills" >> "$GITHUB_OUTPUT"
+          echo "discovered: $skills"
+
+  smoke:
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        skill: ${{ fromJson(needs.discover.outputs.skills) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Regenerate fixtures (if the skill has a generator)
+        working-directory: skills/${{ matrix.skill }}
+        run: |
+          if [ -f tests/make_fixtures.py ]; then
+            python3 tests/make_fixtures.py
+          fi
+
+      - name: Fixtures unchanged after regeneration
+        working-directory: skills/${{ matrix.skill }}
+        run: |
+          if [ -d tests/fixtures ]; then
+            git diff --exit-code tests/fixtures/ \
+              || (echo "Committed fixtures drifted from generator output" && exit 1)
+          fi
+
+      - name: Run smoke test
+        working-directory: skills/${{ matrix.skill }}
+        run: python3 tests/smoke_test.py

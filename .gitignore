@@ -1,0 +1,32 @@
+# Per-skill user configs — each skill stores its real config under
+# $XDG_CONFIG_HOME/<skill-name>/ outside the repo. Legacy in-repo configs
+# are ignored here as a safety net for any user who hasn't migrated yet.
+skills/*/config/teams/*.json
+skills/*/config/user.json
+!skills/*/config/teams/example.json
+!skills/*/config/user.example.json
+
+# Research caches — skills now write under $XDG_CACHE_HOME/<skill-name>/
+# but leave this pattern in as belt-and-braces.
+.cache/
+skills/*/.cache/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Secrets
+.env
+.env.*
+!.env.example
