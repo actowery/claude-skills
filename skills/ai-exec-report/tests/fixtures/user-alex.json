@@ -1,0 +1,50 @@
+{
+  "display_name": "Alex Example",
+  "email": "alex@example.test",
+  "atlassian_account_id": "test-alex-001",
+  "slack_user_id": "U_ALEX_TEST",
+  "github_username": "alex-example",
+  "boss_display_name": "Sam Boss",
+  "boss_first_name": "Sam",
+  "boss_email": "sam.boss@example.test",
+  "boss_tone_preference": "balanced",
+  "cc_list": [],
+  "team": {
+    "name": "Platform",
+    "members": [
+      {
+        "display_name": "Taylor Example",
+        "atlassian_account_id": "test-taylor-002",
+        "slack_user_id": "U_TAYLOR_TEST",
+        "github_username": "taylor-example",
+        "email": "taylor@example.test"
+      },
+      {
+        "display_name": "Jordan Sample",
+        "atlassian_account_id": "test-jordan-003",
+        "slack_user_id": "U_JORDAN_TEST",
+        "github_username": "jordan-sample",
+        "email": "jordan@example.test"
+      }
+    ]
+  },
+  "slack_search_mode": "public",
+  "github": {
+    "orgs": [
+      "test-org"
+    ]
+  },
+  "ai_keywords": [
+    "Claude",
+    "Anthropic",
+    "CLAUDE.md",
+    "AI"
+  ],
+  "jira_ai_labels": [
+    "AI"
+  ],
+  "scan_claude_logs": true,
+  "claude_log_dir": "~/.claude/projects",
+  "cached_at": "2026-06-01",
+  "cache_source": "test_fixture"
+}

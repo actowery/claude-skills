@@ -1,0 +1,39 @@
+{
+  "_comment": "Template only. Generate the real user.json via `init ai-exec-report` — do not hand-edit.",
+  "display_name": "Alex Example",
+  "email": "alex.example@company.com",
+  "atlassian_account_id": "712020:REPLACE",
+  "slack_user_id": "U00REPLACE",
+  "github_username": "alexexample",
+
+  "boss_display_name": "Sam Boss",
+  "boss_first_name": "Sam",
+  "boss_email": "sam.boss@company.com",
+  "boss_tone_preference": "balanced",
+  "cc_list": [],
+
+  "team": {
+    "name": "Platform",
+    "members": [
+      {
+        "display_name": "Taylor Example",
+        "atlassian_account_id": "712020:REPLACE",
+        "slack_user_id": "U00REPLACE",
+        "github_username": "taylor-example",
+        "email": "taylor.example@company.com"
+      }
+    ]
+  },
+
+  "slack_search_mode": "public",
+  "github": {
+    "orgs": ["your-org"]
+  },
+  "ai_keywords": ["Claude", "Anthropic", "CLAUDE.md", "AI", "agent", "skill", "LLM"],
+  "jira_ai_labels": ["AI", "Claude"],
+  "scan_claude_logs": true,
+  "claude_log_dir": "~/.claude/projects",
+
+  "cached_at": "YYYY-MM-DD",
+  "cache_source": "example_template"
+}

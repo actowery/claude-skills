@@ -1,0 +1,12 @@
+{
+  "subject": "Platform AI Weekly \u2014 Jun 8\u201312, 2026",
+  "greeting": "Sam",
+  "opening": "Quiet week on shipments; most of the team was heads-down on prep for the cross-team review.",
+  "team_wins": [
+    "Taylor Example continued the gateway migration work \u2014 nothing merged this week, but the refactor PR is ready for review Monday."
+  ],
+  "blockers": "No material blockers this week; pending items are follow-throughs from last week.",
+  "personal": "",
+  "closing": "Let me know if you want more detail before your review.",
+  "signoff": "Alex"
+}

@@ -1,0 +1,13 @@
+{
+  "subject": "Platform AI Weekly \u2014 Jun 1\u20135, 2026",
+  "greeting": "Sam",
+  "opening": "Mixed week for us \u2014 strong Claude integration progress from Taylor and a release landed from Jordan, but a dependency blocker on the Observability side that's worth flagging.",
+  "team_wins": [
+    "Taylor Example shipped Claude integration into our gateway repo this week, adding a CLAUDE.md and a review workflow so the pattern is repeatable. First PR using the new flow is already in review (PLAT-1234).",
+    "Jordan Sample landed the rate-limiter v2 cutover (OBS-456) ahead of the cross-team freeze \u2014 the canary completed clean and full production rollout is queued for Monday."
+  ],
+  "blockers": "Biggest open item is the Observability dependency bump \u2014 Taylor is unblocked after IT granted the Anthropic developer-group access Tuesday, but we're waiting on a response from the platform-ci team on CI-789 that's gating Jordan's next step. No leadership ask yet; flagging so it's not a surprise if it slips a sprint.",
+  "personal": "On my end this week, I shipped two reusable skills the team now uses to automate our weekly reporting \u2014 small artifact, but paying itself back already.",
+  "closing": "Happy to dig into any of these in our 1:1 or before your upward review.",
+  "signoff": "Alex"
+}

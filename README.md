@@ -8,6 +8,7 @@ A collection of Claude Code skills I build and maintain. One repo, one CI pipeli
 |---|---|
 | [`weekly-confluence-update`](skills/weekly-confluence-update/) | Drafts a team's section on a shared Confluence team weekly-report page. Handles @mention-based assignment, team block detection, append-only safety. 4 signal sources: Jira, Slack (public + optional private), Outlook, GitHub PRs. |
 | [`ai-weekly-update`](skills/ai-weekly-update/) | Drafts an individual row on a shared AI-usage weekly report (Champion/Manager tables). Matches by plain-text name. 5 signal sources including local Claude Code session scanning. Manager-mode weaves team wins alongside personal wins; self-reporting rule skips teammates with their own row. |
+| [`ai-exec-report`](skills/ai-exec-report/) | Drafts a weekly upward-communication **email** from a manager to their manager, reporting the team's AI adoption in upper-mgmt language. Hype-but-honest tone with a non-negotiable blockers section. Skill never sends mail — renders an HTML preview + `.eml` draft file that opens in your default mail client with To/Subject/Body pre-filled. |
 
 Each skill has its own `README.md`, `SKILL.md`, and `tests/`. Start with the subdirectory `README.md`.
 
