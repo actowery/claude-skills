@@ -182,6 +182,7 @@ For each column the user owns (per Phase 2's map), synthesize content in the sty
 - **AI-focused** — lead with skills shipped, CLAUDE.md integrations, adoption stories, concrete Claude-usage numbers if the log scan surfaced them.
 - **Inline `code` marks** for slash commands, skill names, file paths (backtick-wrap in the draft text and the parser will apply marks).
 - **Every claim traces to a source.** Jira key, Slack link, PR number, log entry. No invention.
+- **Tag AI work with its maturity level.** Every paragraph describing AI-related work must include an inline S-level + phase tag (e.g. `(S1 Build infrastructure)`, `(S2 Deploy)`, `(S2 Review)`) per `references/ai-maturity-model.md`. This page's readers include skip-level leadership who use these tags to read the team's trajectory. One tag per topic paragraph, not per sentence. Skip the tag for non-AI content.
 
 **Manager-with-team mode** — Wins paragraph weaves personal + team activity naturally. Structure (see `references/output-style.md` for a full example):
 1. **Lead with team-level posture** — "Team continued heavy Claude adoption this week…" or similar framing if the log scan / activity is broad.

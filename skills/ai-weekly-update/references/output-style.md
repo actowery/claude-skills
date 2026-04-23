@@ -44,6 +44,18 @@ When `team.members[]` is set, Wins becomes a weave of team + personal activity. 
 
 Four named people, four specific artifacts, one personal paragraph, ~75 words. The reader walks away with concrete evidence of team-wide AI adoption — not just the manager's activity.
 
+## Maturity tagging — required
+
+Every topic paragraph describing AI work must close with an inline S-level + phase tag drawn from [`ai-maturity-model.md`](ai-maturity-model.md). The tag tells skip-level readers at-a-glance where on the adoption curve the work sits.
+
+Format: `(S1 Build infrastructure)` / `(S2 Deploy)` / `(S1 → S2 Review)` in parentheses at the end of the paragraph. Bold not required — the parens carry.
+
+With-tags example (fictional team, same shape as the golden reference above):
+
+> Alex integrated Claude into three service repos via `CLAUDE.md` files and a shared workflow template, making AI-assisted review the default for those codebases (**S1 Review infrastructure**). Jordan shipped the `/deploy-preview` skill that provisions an ephemeral preview environment per PR and tears it down on close (**S2 Deploy**). I published the `ai-weekly-update` skill with team fan-out so this page gets drafted with team context (**S2 Operate**). Team's session count this week: 200+ across five projects, steady **S1 Build** daily-active use.
+
+One tag per paragraph, not per sentence. Skip the tag for non-AI content (bug fixes, dep bumps, routine tickets) — the tags lose value fast if overapplied.
+
 **Anti-patterns — do not emit these:**
 - `The team had a great week with AI.` — zero attribution, zero specifics.
 - `Everyone on the team shipped CLAUDE.md.` — overclaim; not literally true unless it is.

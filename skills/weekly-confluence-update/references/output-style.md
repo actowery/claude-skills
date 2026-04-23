@@ -50,6 +50,12 @@ Note the structural features to replicate:
 - Ticket keys woven into prose, not parenthesized at the end of everything.
 - Status words (`in progress`, `blocked`, `in flight`, `resolved`, `merged`) appear naturally inside clauses, not as separate tags.
 
+**Maturity tagging on AI paragraphs.** When a topic paragraph describes AI-related work (Claude integration, skill shipped, CLAUDE.md landing, agent workflow), close the paragraph with an S-level + phase tag per [`ai-maturity-model.md`](ai-maturity-model.md). Example, in the same style as the golden reference above:
+
+> Claude integration – `CLAUDE.md` landed in three service repos this week and a shared workflow template now triggers Claude code review on PR open; enables the team's review step to move toward an outcome-based check rather than purely human (S1 Review infrastructure). Preview-environment skill `/deploy-preview` shipped internally, provisions an ephemeral env per PR and tears it down on close (S2 Deploy).
+
+One tag per paragraph. Skip tags on non-AI paragraphs. The tag is a signal to skip-level readers; dilute it by overtagging and it stops registering.
+
 **Anti-pattern — do not emit this:**
 ```
 **Platform**

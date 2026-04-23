@@ -193,6 +193,8 @@ Two distinct output shapes depending on section kind — see `references/output-
 
 Every sentence must trace to a Jira ticket, Slack message, or email. No invention. Match the page's existing status vocabulary — scan neighboring sections for the words it uses (`In Progress`, `Blocked`, `On Track`, `Delayed`, `Done`) and stay consistent.
 
+**When a topic paragraph describes AI-related work** (Claude integration, a new skill or agent shipped, a `CLAUDE.md` landing, etc.), add an inline S-level + phase tag per `references/ai-maturity-model.md` at the end of the paragraph: `(S1 Build infrastructure)`, `(S2 Deploy)`, `(S1 → S2 Review)`, etc. One tag per paragraph, not per sentence. Skip tags entirely on non-AI paragraphs — the signal only works when it's accurate.
+
 ### Phase 6 — Build the modified ADF
 
 **Side effects:** writes two local files — the drafts JSON and the modified ADF JSON (paths announced before writing). No network calls. The original cached ADF is not mutated.

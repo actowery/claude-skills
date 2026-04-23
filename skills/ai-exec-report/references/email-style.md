@@ -135,6 +135,26 @@ The `boss_tone_preference` field in `user.json` modulates the dial:
 
 Regardless of setting, **never fabricate to hit a tone**. If the week is genuinely quiet, "sober" is just what quiet looks like — don't dress it up for `hype-friendly`.
 
+## Maturity framing — for exec audiences specifically
+
+Upper-management readers care less about individual artifacts than about **where the team sits on the AI adoption curve**. Weave the S-level / phase vocabulary from [`ai-maturity-model.md`](ai-maturity-model.md) into the narrative so a skim gives them a trajectory read.
+
+**How this differs from the Confluence row version.** The row version tags every paragraph inline with `(S1 Build infrastructure)`-style markers. The email version is **calibrated to feel natural, not mechanical** — you tag paragraphs but integrate the S-level into the prose, and close the body with a one-sentence trajectory line. Tags-in-parens look fine in Confluence; in a prose email to an exec, they read as template filler.
+
+**Good example (balanced, in-prose):**
+> Brónach integrated Claude into `bolt-private` with a `CLAUDE.md` and a workflow file, putting that repo on the **S1 Review infrastructure** step. Greg shipped `/install-agent` and extended `/provision-test-infra` to AWS — that's **S2 Deploy** territory, our team's first autonomous provisioning workflow. David closed a customer-facing PDK issue using Claude for fixture generation, which is an **S1 Build** pattern the team has genuinely internalized.
+>
+> Net: we're mostly at **S1 Build** across the stack with growing **S2 Deploy** through custom skills. Next milestone is the `ANTHROPIC_CODE_REVIEW_KEY` rollout completing, which tips Review from S1 to S2.
+
+**Bad example (mechanical):**
+> Brónach shipped CLAUDE.md integration (S1 Review). Greg shipped `/install-agent` (S2 Deploy). David closed ticket (S1 Build). Team at S1-S2.
+
+The good version hands the reader a trajectory. The bad version reads as output from a reporting tool, which is exactly what you don't want leadership to see (even though it is, literally, output from a reporting tool).
+
+**When to skip tags entirely.** If a paragraph is about a non-AI thing — a customer escalation, a blocker, an org update — don't shoehorn a tag in. The tags only work when they're accurate.
+
+**Trajectory sentence at the end of the body.** If the week supports one, add a single sentence to the blockers/personal transition area framing where the team is and where it's heading. Make it concrete: name the specific transition. If it doesn't support a clean read (mixed week, sparse signal), skip it — the tags on individual paragraphs do enough work.
+
 ## Length target
 
 400–700 words total. Leadership will scan it in under 90 seconds. Longer than that and the signal dilutes. Shorter than 300 and it reads like a thin status that didn't need an email.

@@ -108,6 +108,8 @@ Structure (the renderer in Phase 5 lays this out):
 
 Every factual claim in the email must cite a Jira key, PR number, or a clear attribution (name + action verb + artifact).
 
+**Maturity tagging.** Upper-management audiences use maturity framing to understand trajectory, not just ticket count. Weave S-level + phase into the narrative per `references/ai-maturity-model.md`, without making it mechanical. See `references/email-style.md` for the calibration — the goal is that a reader skimming the email comes away with a mental picture of *where* the team is on the curve, not just *what* they shipped. Do this at paragraph level (per teammate or per team-level beat), never per sentence, and finish the body with a one-sentence trajectory read if one is fair ("Team is mostly at S1 Build with increasing S2 Deploy via custom skills").
+
 ### Phase 5 — Render preview + draft file
 
 **Side effects:** writes `/tmp/ai-exec-report-<YYYY-MM-DD>.html` (preview) and `/tmp/ai-exec-report-<YYYY-MM-DD>.eml` (mail-client-openable draft). On macOS, also drives Outlook via AppleScript to open a real editable draft window.
