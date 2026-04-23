@@ -1,0 +1,47 @@
+{
+  "display_name": "Alex Example",
+  "email": "alex@example.test",
+  "atlassian_account_id": "test-alex-001",
+  "slack_user_id": "U_ALEX_TEST",
+  "github_username": "alex-example",
+  "team": {
+    "name": "Platform",
+    "members": [
+      {
+        "display_name": "Taylor Example",
+        "atlassian_account_id": "test-taylor-002",
+        "slack_user_id": "U_TAYLOR_TEST",
+        "github_username": "taylor-example",
+        "email": "taylor@example.test"
+      },
+      {
+        "display_name": "Jordan Sample",
+        "atlassian_account_id": "test-jordan-003",
+        "slack_user_id": "U_JORDAN_TEST",
+        "github_username": "jordan-sample",
+        "email": "jordan@example.test"
+      }
+    ]
+  },
+  "slack_search_mode": "public",
+  "github": {
+    "orgs": [
+      "test-org"
+    ]
+  },
+  "staleness_thresholds": {
+    "slack_thread_silent_days": 7,
+    "email_unreplied_days": 5,
+    "jira_comment_unanswered_days": 14,
+    "jira_assignee_silent_days": 21,
+    "pr_stale_days": 7,
+    "cross_team_mention_unacked_days": 5
+  },
+  "scan_window_days": 14,
+  "customer_escalation_labels": [
+    "Escalation",
+    "Support"
+  ],
+  "cached_at": "2026-06-15",
+  "cache_source": "test_fixture"
+}

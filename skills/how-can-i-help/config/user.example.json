@@ -1,0 +1,39 @@
+{
+  "_comment": "Template only. Generate your real user.json via the init flow in SKILL.md — do not hand-edit.",
+  "display_name": "Alex Example",
+  "email": "alex.example@company.com",
+  "atlassian_account_id": "712020:REPLACE",
+  "slack_user_id": "U00REPLACE",
+  "github_username": "alexexample",
+
+  "team": {
+    "name": "Platform",
+    "members": [
+      {
+        "display_name": "Taylor Example",
+        "atlassian_account_id": "712020:REPLACE",
+        "slack_user_id": "U00REPLACE",
+        "github_username": "taylor-example",
+        "email": "taylor.example@company.com"
+      }
+    ]
+  },
+
+  "slack_search_mode": "public",
+  "github": {"orgs": ["your-org"]},
+
+  "staleness_thresholds": {
+    "slack_thread_silent_days": 7,
+    "email_unreplied_days": 5,
+    "jira_comment_unanswered_days": 14,
+    "jira_assignee_silent_days": 21,
+    "pr_stale_days": 7,
+    "cross_team_mention_unacked_days": 5
+  },
+
+  "scan_window_days": 14,
+  "customer_escalation_labels": ["Escalation", "Support", "TAM", "CustomerPriority"],
+
+  "cached_at": "YYYY-MM-DD",
+  "cache_source": "example_template"
+}

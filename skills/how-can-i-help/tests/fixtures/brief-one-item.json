@@ -1,0 +1,22 @@
+{
+  "scan_window": "2026-06-08 to 2026-06-22",
+  "generated_at": "2026-06-22T09:30:00",
+  "notes": "Quiet window \u2014 only one item met the bar. Good signal that the team's channels are clearing things in real time.",
+  "items": [
+    {
+      "rank": 1,
+      "title": "Stale cross-team dependency on DEP-555",
+      "category": "cross-team-dependency",
+      "description": "Two of our tickets reference DEP-555 (owned by the API Platform team). DEP-555 hasn't been updated in 18 days. Our tickets are sitting in a Blocked state.",
+      "why_help_matters": "An IC-to-IC ping has been tried twice. The next ping from Taylor would be a third in a row, which is awkward for them. Manager-to-manager escalates the signal without escalating the relationship.",
+      "business_benefit": "Unblocking DEP-555 unblocks two downstream tickets on our side. Faster resolution also keeps the API Platform team's silence from becoming a habitual pattern.",
+      "suggested_action": "Manager-to-manager ping to the API Platform lead: 'Two of ours are blocked on DEP-555 \u2014 realistic ETA or can we help pick it up?'",
+      "citations": [
+        {
+          "label": "DEP-555",
+          "url": "https://example.test/browse/DEP-555"
+        }
+      ]
+    }
+  ]
+}
