@@ -29,6 +29,8 @@ On first run, if no config exists, Phase 0 bootstraps from `$XDG_CONFIG_HOME/ai-
 | Send any message, reply to any email, comment on any ticket | **Never — informational skill, user takes all actions themselves** | — |
 | Suggest actions targeting people outside the user's configured team or immediate collaborators | Avoid unless the signal is directly tied to the team | — |
 
+If any data sources are missing, the skill still runs. After delivering the brief, follow `_shared/missing-sources.md` to append a **More signal available** note for any source that couldn't run or had no config.
+
 ## Invocation
 
 ```
@@ -148,6 +150,8 @@ For each selected item, produce four fields:
 Print the brief inline as the primary delivery. Write the markdown file as reference — the user may want to come back to it during the day as they act on items.
 
 No approval gate. This skill is informational — the user takes whatever actions they choose without the skill writing anything remote.
+
+**Missing-sources check.** After printing the brief inline, follow `_shared/missing-sources.md`: check which of the seven sources (Zoom transcripts, Jira, Slack public, Slack private, Outlook, GitHub, Claude Code logs) were skipped or errored during Phase 2. If any were, append the **More signal available** note at the end of the brief — never before it.
 
 ## Safety rules
 

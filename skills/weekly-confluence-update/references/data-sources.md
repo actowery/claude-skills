@@ -147,6 +147,23 @@ Run at least twice per section: once with `--state merged` (shipped work) and on
 
 Useful subject patterns to surface: `"[RELEASE]"`, `"Post-mortem"`, `"Escalation"`, customer names from prior weeks. Skip newsletters and auto-digests.
 
+## Local meeting transcripts
+
+Zoom AI transcripts saved to `~/Projects/Mgmt Assistant/transcripts/` as markdown files with YAML frontmatter. Use as a **supplementary source** when Jira/Slack/Outlook research is thin, or to find in-meeting decisions that never made it into a ticket.
+
+**Finding files in the date window:**
+```
+Glob: ~/Projects/Mgmt Assistant/transcripts/YYYY-MM-DD_*.md
+```
+Frontmatter fields: `date`, `participants`, `meeting_type`, `topics`, `action_items` (`"owner: task"` strings).
+
+**When to use:**
+- `action_items` where owner is the current user → progress/blockers that belong in the weekly update row
+- `topics` for matching the section's subject areas (team decisions, process changes, releases discussed)
+- `meeting_type: team` transcripts → standup/grooming context for team rows
+
+Read frontmatter for triage; read full body only to extract a specific quote or verify a claim.
+
 ## Parallelization & caching
 
 These queries are independent. Fire them in a single batched message.

@@ -53,7 +53,7 @@ No team parameter — this skill is per-individual. If the invocation is `init a
 - `gh` CLI (authenticated with `repo` scope)
 - Read access to `~/.claude/projects/` on the local machine
 
-If any are missing, the skill still runs; it reports which sources it couldn't reach.
+If any are missing, the skill still runs. After delivering the preview, follow `_shared/missing-sources.md` to append a **More signal available** note for any source that couldn't run or had no config.
 
 ## Workflow
 
@@ -230,6 +230,8 @@ scripts/render_preview.py <modified-adf.json> --title "<page title>" --out /tmp/
 ```
 
 Tell the user: preview path + `approve` / `edit <column>: <change>` / `cancel`.
+
+**Missing-sources check.** After delivering the preview prompt, follow `_shared/missing-sources.md`: check which of the seven sources (Zoom transcripts, Jira, Slack public, Slack private, Outlook, GitHub, Claude Code logs) were skipped or errored during Phase 4. If any were, append the **More signal available** note at the end of your message — after the approve/edit/cancel options, never before.
 
 ### Phase 8 — Publish on approval
 

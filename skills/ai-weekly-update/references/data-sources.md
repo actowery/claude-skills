@@ -167,9 +167,41 @@ Output includes:
 
 **Privacy note:** this is local-only; no log contents leave the machine. The draft will surface skill names, tool counts, and project names — never individual messages.
 
+## Local meeting transcripts
+
+Zoom AI transcripts saved to `~/Projects/Mgmt Assistant/transcripts/` as markdown files with YAML frontmatter. These are a **supplementary local source** — they capture context, commitments, and decisions from meetings that won't surface in Jira/Slack/GitHub.
+
+**Finding files in the date window:**
+```
+Glob: ~/Projects/Mgmt Assistant/transcripts/YYYY-MM-DD_*.md
+```
+Filter by `date:` field in frontmatter against your window. Each file has:
+- `date` / `time` — when the meeting happened
+- `participants` — everyone who spoke
+- `meeting_type` — `1on1`, `team`, `stakeholder`, etc.
+- `topics` — keyword list
+- `action_items` — `"owner: task"` strings; **high-value for AI wins** (Adrian's commitments, team deliverables)
+- The full raw transcript below the frontmatter
+
+**When to use:**
+- Grep `action_items` for the user's name to surface commitments made in meetings
+- Grep `topics` for AI-related terms (`GSD`, `Claude`, `skill`, `agentic`) for AI adoption wins
+- Use participant list + meeting_type to reconstruct "met with X about Y" context when Slack/Jira is thin
+
+**Grep patterns:**
+```
+# Adrian's action items across all transcripts in window
+grep -l "Adrian:" ~/Projects/Mgmt\ Assistant/transcripts/YYYY-MM-DD_*.md
+
+# AI-topic meetings
+grep -l "GSD\|Claude\|agentic\|skill" in frontmatter topics field
+```
+
+Read the frontmatter only for signal-gathering; read the full body only if you need to quote or verify a specific claim.
+
 ## Parallelization
 
-All five sources are independent within a window. Fire them in one batched message when possible. Cache raw JSON under `${XDG_CACHE_HOME:-$HOME/.cache}/ai-weekly-update/<pageId>/<YYYY-MM-DD>/` so re-runs don't re-query. Cache is deleted on successful publish.
+All six sources are independent within a window. Fire them in one batched message when possible. Cache raw JSON under `${XDG_CACHE_HOME:-$HOME/.cache}/ai-weekly-update/<pageId>/<YYYY-MM-DD>/` so re-runs don't re-query. Cache is deleted on successful publish.
 
 ## Attribution discipline
 

@@ -39,6 +39,8 @@ Paths live outside the skill install dir so plugin upgrades can't wipe your boss
 - Read access to `~/.claude/projects/` for local session scan
 - A default mail client on the OS that handles `.eml` files (macOS Mail.app, Outlook, etc.)
 
+If any are missing, the skill still runs. After delivering the preview, follow `_shared/missing-sources.md` to append a **More signal available** note for any source that couldn't run or had no config.
+
 ## Workflow
 
 ### Phase 0 — Init / edit user config
@@ -134,6 +136,8 @@ Tell the user:
 > Reply `approve` — the draft stays open in Outlook; you click Send when ready.
 > Reply `edit <section>: <change>` to rewrite that section (I'll close the current draft and open a revised one).
 > Reply `cancel` to discard the Outlook draft and delete the local files.
+
+**Missing-sources check.** After delivering the above prompt, follow `_shared/missing-sources.md`: check which of the seven sources (Zoom transcripts, Jira, Slack public, Slack private, Outlook, GitHub, Claude Code logs) were skipped or errored during Phase 2. If any were, append the **More signal available** note at the end of your message — after the approve/edit/cancel options, never before.
 
 ### Phase 6 — Finalize on approval
 

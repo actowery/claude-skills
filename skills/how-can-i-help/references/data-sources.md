@@ -147,6 +147,23 @@ PRs with `requestedReviewers` non-empty and no `reviews` in the window are the c
 
 `scripts/scan_claude_logs.py --start <N days ago>` gives per-day session counts across projects. If you want to infer "quiet for the team" vs "quiet for just one person," compare this (your own usage) against no-signal from teammates elsewhere. Only useful as a weak secondary signal for the gone-quiet category.
 
+## Local meeting transcripts
+
+Zoom AI transcripts saved to `~/Projects/Mgmt Assistant/transcripts/` as markdown files with YAML frontmatter. In this skill, transcripts are a **high-signal source for dropped commitments** — action items verbally agreed to in meetings that never appeared in Jira.
+
+**Finding files in the scan window:**
+```
+Glob: ~/Projects/Mgmt Assistant/transcripts/YYYY-MM-DD_*.md
+```
+Frontmatter fields: `date`, `participants`, `meeting_type`, `topics`, `action_items` (`"owner: task"` strings).
+
+**When to use:**
+- Grep `action_items` for Adrian's name → commitments he made verbally; cross-check against Jira to see if a ticket was ever created. If not, it's a crack candidate.
+- `action_items` for team member names → things Adrian asked someone to do; cross-check Slack/Jira for follow-through. Silence is a crack.
+- `meeting_type: 1on1` transcripts → 1:1 commitments are especially high-signal because they're personal, not tracked in tickets.
+
+Treat a transcript action item with no downstream Jira ticket or Slack thread as the same priority as a buried @-mention — it's a real ask that fell through.
+
 ## Source prioritization during Phase 3 scoring
 
 When picking the top 3, favor sources in roughly this order — the further down the list, the higher the noise ratio and the more human judgment is needed:

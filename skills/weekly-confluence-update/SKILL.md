@@ -55,6 +55,8 @@ The invoking environment must have these MCP servers connected:
 - Slack — for `slack_search_public` (and `slack_search_public_and_private` if available)
 - Outlook / M365 — for `outlook_email_search`
 
+If any are missing, the skill still runs. After delivering the preview, follow `_shared/missing-sources.md` to append a **More signal available** note for any source that couldn't run or had no config.
+
 **Team roster is auto-discovered, not hand-maintained.** On first run for a given team, the skill infers members by inspecting prior weekly pages in the same Confluence space (whoever has been authoring `**<TeamName>**` blocks IS the team) and cross-checks with Slack channel membership and Jira recent co-assignees. It presents the inferred roster to the user for one-time confirmation, then caches it at `config/teams/<team-name>.json`. Subsequent runs reuse the cache. See Phase 1b for the discovery procedure.
 
 ## Workflow
@@ -234,6 +236,8 @@ Never create new table rows or cells. Never reorder existing content. Never chan
 Run `scripts/render_preview.py <modified-adf.json> --title "<page title>" --out /tmp/weekly-preview-<pageId>.html`. It produces a standalone HTML file that renders the modified page with **your additions highlighted in yellow**, so the user can see exactly what's being added. Open it with `open <path>` on macOS.
 
 Tell the user: "Preview opened at `<path>`. Review the yellow-highlighted additions. Reply `approve`, `edit <section>: <change>`, or `cancel`."
+
+**Missing-sources check.** After delivering the preview prompt, follow `_shared/missing-sources.md`: check which of the seven sources (Zoom transcripts, Jira, Slack public, Slack private, Outlook, GitHub, Claude Code logs) were skipped or errored during Phase 4. If any were, append the **More signal available** note at the end of your message — after the approve/edit/cancel options, never before.
 
 ### Phase 8 — Publish on approval
 

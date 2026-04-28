@@ -111,6 +111,23 @@ Good use:
 Bad use:
 > We made 221 `Bash` tool calls, 147 `Read` calls, and invoked `anthropic-skills:skill-creator` four times.
 
+## Local meeting transcripts
+
+Zoom AI transcripts saved to `~/Projects/Mgmt Assistant/transcripts/` as markdown files with YAML frontmatter. Useful in this skill for surfacing **cross-team collaboration, commitments made to leadership, and escalations discussed verbally** that may not appear in Jira/Slack yet.
+
+**Finding files in the date window:**
+```
+Glob: ~/Projects/Mgmt Assistant/transcripts/YYYY-MM-DD_*.md
+```
+Frontmatter fields: `date`, `participants`, `meeting_type` (`1on1`, `team`, `stakeholder`), `topics`, `action_items` (`"owner: task"` strings).
+
+**When to use:**
+- `action_items` where owner is Adrian or a team member → concrete deliverables/commitments
+- `meeting_type: stakeholder` or participants including VP/director names → cross-team or leadership touchpoints worth surfacing in an exec report
+- `topics` matching AI terms → additional AI adoption evidence beyond GitHub/Jira
+
+Read frontmatter only for signal-gathering; read full body only to verify or quote a specific claim. Never fabricate a meeting detail that isn't in the transcript.
+
 ## Parallelization and caching
 
 Fire all five sources in parallel. Cache under `${XDG_CACHE_HOME:-$HOME/.cache}/ai-exec-report/<date>/` keyed by source. Re-runs within the same day reuse the cache. Cache is disposable.
