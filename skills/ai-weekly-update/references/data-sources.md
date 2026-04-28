@@ -27,7 +27,8 @@ Per-user file, auto-produced by Phase 0 init and gitignored. Not meant to be han
     "members": [
       {"display_name": "Member One", "atlassian_account_id": "...",
        "slack_user_id": "...", "github_username": "memone",
-       "email": "member.one@company.com"}
+       "email": "member.one@company.com",
+       "pronouns": "they/them"}
     ]
   },
   "cached_at": "YYYY-MM-DD",
@@ -40,6 +41,7 @@ Per-user file, auto-produced by Phase 0 init and gitignored. Not meant to be han
 - `display_name_overrides`: any alternate names your row might appear under (middle initial, nickname).
 - `scan_claude_logs`: if false, skip local log scanning entirely.
 - `team`: **optional**. Set only if the user manages a team and wants team activity included in the Wins draft. Members need at least `display_name`; whichever IDs are present enable the matching source (missing `github_username` → skip GitHub for that member, etc.).
+- `pronouns` (optional, on each person and at top level): used when the draft refers to the person by pronoun. See `_shared/pronoun-handling.md` for the universal rule — if absent, use the person's name only and never guess.
 
 ## Jira
 

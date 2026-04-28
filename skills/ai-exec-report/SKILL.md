@@ -156,6 +156,7 @@ On any response other than unambiguous approval (`approve`, `looks good`, `ship 
 - **No fabrication** — every named artifact must trace to a real Jira/PR/commit/Slack/email/log entry. If research is thin, reflect that in the email rather than invent.
 - **Honesty requirement** — the email MUST include at least one blocker/concern/nuance line, even when the week was genuinely good. If there's truly nothing, say so explicitly ("No material blockers this week"). Excessive positivity without any grounding reads as unreliable signal to leadership.
 - **Respect the boss's preferences** — if the user has configured `boss_tone_preference` in `user.json` (`hype-friendly` / `balanced` / `sober`), calibrate accordingly. Default is `balanced`.
+- **Pronouns** — when referring to a teammate by pronoun in the email, use the value from their `pronouns` config field. If absent, use the person's name only. Never guess pronouns from a name. See `_shared/pronoun-handling.md`. This is especially important here because the email goes upward — wrong pronouns in an exec-facing artifact are expensive to fix.
 
 ## Files in this skill
 

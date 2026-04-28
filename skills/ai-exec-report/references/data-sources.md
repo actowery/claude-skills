@@ -23,7 +23,8 @@ Same five sources as `ai-weekly-update`, with exec-framing notes on what to do w
     "members": [
       {"display_name": "Taylor Example", "atlassian_account_id": "...",
        "slack_user_id": "...", "github_username": "taylor-example",
-       "email": "taylor.example@company.com"}
+       "email": "taylor.example@company.com",
+       "pronouns": "they/them"}
     ]
   },
 
@@ -40,6 +41,8 @@ Same five sources as `ai-weekly-update`, with exec-framing notes on what to do w
 ```
 
 Boss fields are required (draft can't go anywhere without a recipient). Team is required (this skill only runs in manager mode). Everything else follows `ai-weekly-update`'s conventions.
+
+`pronouns` is optional on each team member (and on the user). The exec email will use them when referring to a teammate by pronoun. See `_shared/pronoun-handling.md` for the rule — when absent, use the person's name only. Never guess. This is especially important here because the email goes upward; wrong pronouns in an exec-facing artifact are expensive to fix.
 
 ## Jira
 

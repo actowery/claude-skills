@@ -253,6 +253,7 @@ Rules:
 - **Preserve empty-cell shape** — blank cells in the source ADF are encoded as `{type: paragraph, attrs: {localId: ...}}` with no `content` key; match that shape when leaving cells unchanged.
 - **No fabrication** — every sentence traces to a real artifact. If a research source is thin, report that in the preview rather than invent filler.
 - **Private Slack opt-in** — only when `slack_search_mode: "public_and_private"` in config AND the user hasn't downgraded this run.
+- **Pronouns** — if the draft refers to a teammate by pronoun, use the value from their `pronouns` config field. If absent, use the person's name only. Never guess pronouns from a name. See `_shared/pronoun-handling.md` for the universal rule.
 
 ## Files in this skill
 

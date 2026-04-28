@@ -168,6 +168,7 @@ No approval gate. This skill is informational — the user takes whatever action
 - **Honest count.** Deliver fewer than 3 items if fewer than 3 are genuine. Empty-week output is valid.
 - **Respect team boundaries.** Don't suggest actions that are someone else's responsibility or that step on a peer manager's lane.
 - **Private Slack opt-in.** Same as other skills — only uses `slack_search_public_and_private` when config says so.
+- **Pronouns.** When referring to a person by pronoun in the brief, use the value from their `pronouns` config field. If absent, use the person's name only. Never guess pronouns from a name. See `_shared/pronoun-handling.md`.
 
 ## Files in this skill
 

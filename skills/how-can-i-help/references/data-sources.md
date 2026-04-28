@@ -20,7 +20,8 @@ Query patterns per source, biased toward **silence/staleness** rather than activ
         "atlassian_account_id": "712020:...",
         "slack_user_id": "U00...",
         "github_username": "taylor-example",
-        "email": "taylor.example@company.com"
+        "email": "taylor.example@company.com",
+        "pronouns": "they/them"
       }
     ]
   },
@@ -46,6 +47,8 @@ Query patterns per source, biased toward **silence/staleness** rather than activ
 ```
 
 Threshold defaults in this schema are conservative (longer = fewer results, higher signal). Tune down if the skill feels thin; tune up if it's surfacing items the user was already aware of.
+
+`pronouns` is optional on each team member. When the brief refers to someone by pronoun (e.g. in the "Why help matters" framing), use the value from their config record. See `_shared/pronoun-handling.md` for the rule — when absent, use the person's name and never guess.
 
 ## Jira — finding stale-but-not-dead tickets
 

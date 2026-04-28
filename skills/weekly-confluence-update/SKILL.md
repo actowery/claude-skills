@@ -268,6 +268,7 @@ Rules:
 - **Team scope.** Releases and challenges must be the user's team's, not anyone else's. Cross-check every release against `config/team.json` project/repo ownership before including it.
 - **Private Slack.** Only search private channels if explicitly authorized for this run. Default to `slack_search_public` only.
 - **No new structure.** Do not add headings, panels, tables, or rows. Append inside existing cells only.
+- **Pronouns.** When referring to a team member by pronoun in the draft, use the value from their `pronouns` config field. If absent, use the person's name only. Never guess pronouns from a name. See `_shared/pronoun-handling.md`.
 
 ## Files in this skill
 

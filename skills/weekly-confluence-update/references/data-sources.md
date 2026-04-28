@@ -20,6 +20,7 @@ Schema:
       "slack_user_id": "U01AB2CD3EF",
       "github_username": "alexexample",
       "email": "alex.example@company.com",
+      "pronouns": "they/them",
       "confidence": "confirmed",
       "signals": ["user_confirmed"]
     }
@@ -48,6 +49,7 @@ Schema:
 - `github.orgs`: organizations the skill should scope PR searches to. Empty means skip GitHub research.
 - `github.default_state`: default PR state filter for `search_github.py` (`merged` for shipped work).
 - `members[].github_username`: per-member GitHub handle. Missing handles are warned about, not fatal.
+- `members[].pronouns` (optional): used when the draft refers to the member by pronoun. See `_shared/pronoun-handling.md` — when absent, use the person's name only and never guess.
 
 The `page_layout` block lets teams whose Confluence template uses different row names (e.g. "Blockers" instead of "Challenges", "Shipped" instead of "Product Releases Completed") or a different prompt phrasing ("please share updates on...") override what the parser looks for. If omitted, defaults are used.
 
