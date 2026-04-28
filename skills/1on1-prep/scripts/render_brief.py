@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """
-Render a 1:1 prep brief from a structured JSON document to a markdown file
-saved under /tmp/. The skill's model produces the JSON during Phase 4; this
-script lays it out consistently so the same brief format comes out every run.
+Render a 1:1 prep brief from a structured JSON document to a markdown file.
+Output directory is resolved from user.json's `prep_output_dir` field
+(default: ~/Projects/Mgmt Assistant/1on1-preps), falling back to /tmp/.
+The skill's model produces the JSON during Phase 4; this script lays it out
+consistently so the same brief format comes out every run.
 
 Input JSON shape:
   {
@@ -34,13 +36,36 @@ Sections with include=false are dropped. If all sections are dropped, an
 empty-brief message is rendered noting that the scan turned up nothing.
 
 Usage:
-    render_brief.py --input brief.json --out /tmp/1on1-prep-david-swan-2026-04-28.md
+    render_brief.py --input brief.json [--out PATH] [--user-config PATH]
+
+    If --out is omitted, the output path is derived from `prep_output_dir` in
+    user.json (or ~/Projects/Mgmt\ Assistant/1on1-preps as the hardcoded
+    fallback) using the person slug + date from the brief JSON.
 """
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
+
+
+DEFAULT_PREP_OUTPUT_DIR = "~/Projects/Mgmt Assistant/1on1-preps"
+DEFAULT_USER_CONFIG = "~/.config/1on1-prep/user.json"
+
+
+def resolve_output_dir(user_config_path: str) -> Path:
+    """Read prep_output_dir from user.json, falling back to default."""
+    cfg_path = Path(user_config_path).expanduser()
+    if cfg_path.exists():
+        try:
+            cfg = json.loads(cfg_path.read_text())
+            output_dir = cfg.get("prep_output_dir")
+            if output_dir:
+                return Path(output_dir).expanduser()
+        except Exception:
+            pass
+    return Path(DEFAULT_PREP_OUTPUT_DIR).expanduser()
 
 
 HEADER = """# 1:1 Prep — {display_name}
@@ -114,14 +139,27 @@ def render(data):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--input", required=True, help="Path to brief JSON")
-    p.add_argument("--out", required=True, help="Path to write the markdown brief")
+    p.add_argument("--out", default=None, help="Path to write the markdown brief (derived from prep_output_dir if omitted)")
+    p.add_argument("--user-config", default=DEFAULT_USER_CONFIG, help="Path to user.json")
     args = p.parse_args()
 
     data = json.loads(Path(args.input).read_text())
+
+    if args.out:
+        out_path = Path(args.out)
+    else:
+        person = data.get("person") or {}
+        slug = person.get("slug") or person.get("display_name", "unknown").lower().replace(" ", "-")
+        window = data.get("meeting_window") or {}
+        date = window.get("this_1on1") or "unknown-date"
+        out_dir = resolve_output_dir(args.user_config)
+        out_dir.mkdir(parents=True, exist_ok=True)
+        out_path = out_dir / f"1on1-prep-{slug}-{date}.md"
+
     md = render(data)
-    Path(args.out).write_text(md)
+    out_path.write_text(md)
     print(json.dumps({
-        "out": args.out,
+        "out": str(out_path),
         "sections": len([s for s in data.get("sections") or [] if s.get("include", True)]),
         "person": (data.get("person") or {}).get("display_name"),
     }))

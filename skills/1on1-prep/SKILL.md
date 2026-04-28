@@ -25,7 +25,7 @@ On first run, if no config exists, Phase 0 bootstraps from `$XDG_CONFIG_HOME/ai-
 | Action | Scope | When |
 |---|---|---|
 | Write `$XDG_CONFIG_HOME/1on1-prep/user.json` | Local | Phase 0 init — path announced first |
-| Write `/tmp/1on1-prep-<person>-<date>.md` | Local | Phase 5 |
+| Write `<prep_output_dir>/1on1-prep-<person>-<date>.md` (gitignored, default `~/Projects/Mgmt Assistant/1on1-preps`) | Local | Phase 5 |
 | Write research cache under `$XDG_CACHE_HOME/1on1-prep/` | Local | Phase 3 |
 | Read Jira / Slack / Outlook / GitHub / Zoom | Remote reads only | Phase 3 |
 | Read Outlook calendar (only for `1on1` / `1on1 next` invocations) | Remote read only | Phase 1 |
@@ -95,15 +95,37 @@ Two paths:
 
 ### Phase 2 — Determine window
 
-**Side effects:** read-only Zoom + filesystem.
+**Side effects:** read-only Outlook + Zoom + filesystem.
 
-1. Search Zoom for the most recent prior 1:1 with this person:
-   - `search_meetings` for meetings in the past 90 days where attendees include both the user and the target person AND `attendee_size <= 2` (1:1 heuristic). The `topic` often contains both names — fall back to topic match if needed.
-2. Also search local transcripts (`Glob: <transcript_dir>/*.md`, frontmatter `meeting_type: 1on1` AND target person in `participants`).
-3. Window = (most recent prior 1:1 date + 1 day) → today.
-4. If neither source returns a prior 1:1: window = today minus `prep_defaults.fallback_window_days` (default 14 days) → today.
-5. User can override with explicit dates from the invocation.
-6. Note the prior 1:1's `meeting_uuid` (or local file path) — Phase 3 will mine it for action items.
+**Why Outlook-first:** Zoom `search_meetings` only filters by topic/agenda keywords — there is no attendee filter parameter, and topic matching is fragile (e.g. `1on1` vs `1:1`, slash/colon tokenization issues, recurring meetings indexed as `schedule_expired`). Outlook calendar events have accurate attendee lists and always contain the Zoom join URL, making them the reliable source for finding a specific person's recurring 1:1.
+
+**Step 1 — Outlook calendar (primary path):**
+1. Call `outlook_calendar_search` with `attendee: <person_email>` and `beforeDateTime: today`, `afterDateTime: 90 days ago`.
+2. From results, filter client-side for events where `attendee_count == 2` (just the user and the target person). These are 1:1 candidates.
+3. Sort by date descending. Take the most recent completed occurrence.
+4. Extract the Zoom meeting number from the join URL in the event body (e.g. `zoom.us/j/91491970034` → `91491970034`).
+5. Call `get_meeting_assets(<meeting_number>)` directly — for a recurring meeting number this returns assets for the most recent completed occurrence.
+
+**Step 2 — Zoom search (fallback if Step 1 finds nothing):**
+Try multiple query variants in sequence, stopping at first hit:
+- `"<person_first_name>/<user_first_name> 1:1"` or `"<user_first_name>/<person_first_name> 1:1"` (exact topic variants)
+- `"1:1"` with a narrow time window (±30 min around the expected recurring slot if known)
+- `"<person_first_name>"` alone — filter results client-side for `attendee_size <= 2`
+
+For any Zoom result: do NOT pre-filter by `has_transcript_permission` or `has_transcript` — these flags are unreliable. Call `get_meeting_assets` on every candidate and check `my_notes.has_my_notes` in the response.
+
+**Step 3 — Local transcripts (fallback if Steps 1–2 find nothing):**
+`Glob: <transcript_dir>/*.md`, frontmatter `meeting_type: 1on1` AND target person in `participants`. Sort by `date` descending.
+
+**Step 4 — Prior prep files:**
+`Glob: <prep_output_dir>/1on1-prep-<person-slug>-*.md`. The most recent prior prep brief can supplement or confirm the window even if no transcript is found.
+
+**Window resolution:**
+- Window = (most recent prior 1:1 date + 1 day) → today.
+- If no prior 1:1 found anywhere: window = today minus `prep_defaults.fallback_window_days` (default 14 days) → today.
+- User can override with explicit dates from the invocation.
+
+Note the prior 1:1's meeting number / UUID / local file path — Phase 3 will mine it for action items.
 
 ### Phase 3 — Research
 
@@ -179,9 +201,11 @@ Use for `peers[]` people. Lighter than direct report, no growth topics, no upwar
 
 ### Phase 5 — Deliver
 
-**Side effects:** writes `/tmp/1on1-prep-<person-slug>-<YYYY-MM-DD>.md` via `scripts/render_brief.py`; prints the brief inline.
+**Side effects:** writes `<prep_output_dir>/1on1-prep-<person-slug>-<YYYY-MM-DD>.md` via `scripts/render_brief.py`; prints the brief inline.
 
-Print the brief inline as the primary delivery. The markdown file is for reference during the meeting itself.
+Output directory: `prep_output_dir` from `user.json` (default: `~/Projects/Mgmt Assistant/1on1-preps`). This directory is gitignored — preps persist across sessions for easy reference but are never committed. Fall back to `/tmp/` only if `prep_output_dir` is not set and the directory cannot be created.
+
+Print the brief inline as the primary delivery. The markdown file is for reference during the meeting itself and for future prep runs (prior preps can be used as additional context when re-prepping the same person).
 
 No approval gate. The user reads, takes whatever notes they want into the meeting, and the skill is done.
 
@@ -245,6 +269,7 @@ No approval gate. The user reads, takes whatever notes they want into the meetin
   "github": {"orgs": ["your-org"]},
   "slack_search_mode": "public",
   "transcript_dir": "~/Projects/Mgmt Assistant/transcripts",
+  "prep_output_dir": "~/Projects/Mgmt Assistant/1on1-preps",
 
   "prep_defaults": {
     "fallback_window_days": 14,

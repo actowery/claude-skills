@@ -22,27 +22,43 @@ Two distinct queries.
 
 ### A. The previous 1:1 transcript
 
+**Why Zoom search alone is unreliable for finding a specific 1:1:**
+- `search_meetings` has no attendee filter — only keyword (`q`) search against topic/agenda
+- Topic formats vary (`1:1`, `1on1`, `First/Last 1:1`, etc.) and slash/colon characters break keyword matching
+- Recurring meetings may surface as `meeting_category: "schedule_expired"` with misleading `has_transcript: false` and `has_transcript_permission: false` flags even when a transcript exists
+- `meeting_uuid` in search results is sometimes the meeting number, not the UUID
+
+**Use Outlook calendar as the primary path:**
 ```
-search_meetings(
-  q: "<target_person_first_name>",
-  from: "<today minus 90 days>T00:00:00Z",
-  to:   "<today>T23:59:59Z"
+outlook_calendar_search(
+  attendee: "<target_person_email>",
+  afterDateTime: "<today minus 90 days>",
+  beforeDateTime: "<today>"
 )
 ```
 
-Filter results client-side:
-- `attendees[]` includes both user email and target email
-- `attendee_size` is 2 (or 1 in rare cases — Zoom doesn't always count the host)
-- `meeting_category == "history"` (already happened)
+Filter results client-side for `attendee_count == 2` (just the user and the target). Sort by date descending. For the most recent hit:
+1. Extract the Zoom join URL from the event body — format: `zoom.us/j/<meeting_number>`
+2. Parse the meeting number from the URL
+3. Call `get_meeting_assets(<meeting_number>)` directly
 
-Sort by `meeting_end_time` descending. Take the most recent. Note its `meeting_uuid` — this is the previous 1:1.
+For recurring meetings, `get_meeting_assets` with a numeric meeting number returns assets for the **most recent completed occurrence** — no need to find the specific occurrence UUID.
 
-Then:
+**Zoom search fallback** (only if Outlook calendar finds nothing):
+
+Try these queries in order, stopping at first result with `attendee_size <= 2`:
+1. `q: "<person_first>/<user_first> 1:1"` — exact topic match (try both name orderings)
+2. `q: "1:1"` with tight time window ±30 min of the expected recurring slot
+3. `q: "<person_first_name>"` — broad, filter client-side for `attendee_size <= 2`
+
+For any Zoom result: do NOT pre-filter by `has_transcript_permission` or `has_transcript` — both flags are unreliable. Call `get_meeting_assets` on every candidate and check `my_notes.has_my_notes` in the response.
+
+Once the meeting is found via either path:
 ```
-get_meeting_assets(meetingId: "<meeting_uuid>")
+get_meeting_assets(meetingId: "<meeting_number_or_uuid>")
 ```
 
-Don't pre-filter by `has_transcript_permission`. Check `my_notes.has_my_notes` in the response. If true, mine the transcript per `references/transcript-mining.md`.
+Check `my_notes.has_my_notes`. If true, mine the transcript per `references/transcript-mining.md`.
 
 ### B. Other meetings in the window where target person attended
 
