@@ -176,7 +176,7 @@ Key fields:
 - `meeting_type` team meetings → standup/grooming context
 - `topics` matching section subject areas — team decisions, process changes, releases discussed
 
-**Access note:** `has_transcript_permission: false` in search results can be misleading — call `get_meeting_assets` for any meeting you hosted regardless of that flag.
+**Access note:** Do not pre-filter meetings by `has_transcript_permission` or `has_summary_permission` in search results — these flags are unreliable and will cause you to skip accessible transcripts. Call `get_meeting_assets` on **every** meeting in the window, regardless of those flags and regardless of whether you were the host. Check `my_notes.has_my_notes` in the response: `true` means content is available; `false` means Zoom AI Companion wasn't active for that meeting and there's nothing to retrieve. You don't need to be the host — you only need AI Companion to have been running in the meeting.
 
 ### Fallback: local transcript files
 
