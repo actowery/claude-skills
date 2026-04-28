@@ -15,9 +15,9 @@ Example:
 ---
 More signal available
 
-- Zoom transcripts: no meeting transcripts found in ~/Projects/Mgmt Assistant/transcripts/.
-  Paste Zoom AI transcript text into a Claude Code session in that project to save them.
-  Once saved, this skill will pull action items, topics, and meeting context automatically.
+- Zoom: Zoom MCP not reachable — meeting transcripts and summaries unavailable.
+  Connect the Zoom MCP in your Claude Code settings and ensure Zoom AI Companion is enabled for your meetings.
+  Adds meeting summaries, speaker-labeled transcripts, action items, and 1:1 commitments automatically.
 
 - Jira: Atlassian MCP not reachable or account not configured.
   Run `init <skill-name>` to set up your Atlassian account ID, or connect the Atlassian MCP
@@ -36,7 +36,7 @@ Check each of these at the end of the research phase. Flag any that were skipped
 
 | Source | Missing condition | What it unlocks |
 |---|---|---|
-| **Zoom transcripts** | `~/Projects/Mgmt Assistant/transcripts/` has no files in date window | Action items made in meetings, AI discussion context, 1:1 commitments |
+| **Zoom** | Zoom MCP unreachable; OR no meetings with transcript/summary access found in window | Meeting summaries, speaker-labeled transcripts, action items, 1:1 commitments, cross-team decisions |
 | **Jira** | Atlassian MCP unreachable, or `atlassian_account_id` absent from config | Ticket-level AI activity, releases, escalations, in-progress work |
 | **Slack (public)** | Slack MCP unreachable, or `slack_user_id` absent from config | Team AI discussions, announcements, @-mentions |
 | **Slack (private)** | `slack_search_mode` is `"public"` | DMs, private channel threads — often where real decisions happen |
@@ -46,7 +46,7 @@ Check each of these at the end of the research phase. Flag any that were skipped
 
 ## What "missing" means per source
 
-- **Zoom transcripts**: `Glob` finds no `.md` files in `~/Projects/Mgmt Assistant/transcripts/` whose `date:` frontmatter falls in the window.
+- **Zoom**: Zoom MCP call throws or returns a connection error; OR `search_meetings` returns zero meetings in the window with `has_transcript_permission: true` or `has_summary_permission: true`, AND no local `.md` fallback files exist in `~/Projects/Mgmt Assistant/transcripts/` for the window.
 - **Jira**: MCP call throws or returns a connection error; OR config has no `atlassian_account_id`.
 - **Slack (public)**: MCP call throws or returns a connection error; OR config has no `slack_user_id`.
 - **Slack (private)**: `slack_search_mode` is not `"public_and_private"` in config.

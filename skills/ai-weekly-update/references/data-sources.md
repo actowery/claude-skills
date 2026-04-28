@@ -167,41 +167,48 @@ Output includes:
 
 **Privacy note:** this is local-only; no log contents leave the machine. The draft will surface skill names, tool counts, and project names — never individual messages.
 
-## Local meeting transcripts
+## Zoom meetings
 
-Zoom AI transcripts saved to `~/Projects/Mgmt Assistant/transcripts/` as markdown files with YAML frontmatter. These are a **supplementary local source** — they capture context, commitments, and decisions from meetings that won't surface in Jira/Slack/GitHub.
+Zoom AI Companion transcripts and summaries are available directly via the Zoom MCP. This is the **primary source** for meeting context, action items, and decisions. Fall back to local transcript files for meetings that predate the integration or weren't captured by AI Companion.
 
-**Finding files in the date window:**
+### Primary: Zoom MCP
+
+**Step 1 — Find meetings in the window:**
+```
+search_meetings(
+  from: "<start>T00:00:00Z",
+  to:   "<end>T23:59:59Z"
+)
+```
+Note the `meeting_uuid` for each result. Prefer UUID over numeric `meeting_number` for recurring meetings — it targets the specific occurrence.
+
+**Step 2 — Pull assets per meeting:**
+```
+get_meeting_assets(meetingId: "<meeting_uuid>")
+```
+Key fields:
+- `my_notes.transcript.transcript_items[]` — full speaker-labeled transcript (`start`, `end`, `text`)
+- `meeting_summary` — AI-generated summary with quick recap and next steps (when available)
+- `participants` — attendee list
+
+**When to use which field:**
+- For action items and AI wins: scan `my_notes.transcript.transcript_items` for task language ("I'll", "we'll ship", "by next week") and AI terms ("Claude", "skill", "CLAUDE.md")
+- For high-level context: `meeting_summary.quick_recap` is faster and sufficient for most drafting
+- Read the full transcript only to verify or quote a specific claim
+
+**Access note:** `has_transcript_permission: false` in search results can be misleading — call `get_meeting_assets` for any meeting you hosted regardless of that flag.
+
+### Fallback: local transcript files
+
+If Zoom MCP is unreachable, or for meetings predating the integration, check local files:
 ```
 Glob: ~/Projects/Mgmt Assistant/transcripts/YYYY-MM-DD_*.md
 ```
-Filter by `date:` field in frontmatter against your window. Each file has:
-- `date` / `time` — when the meeting happened
-- `participants` — everyone who spoke
-- `meeting_type` — `1on1`, `team`, `stakeholder`, etc.
-- `topics` — keyword list
-- `action_items` — `"owner: task"` strings; **high-value for AI wins** (Adrian's commitments, team deliverables)
-- The full raw transcript below the frontmatter
-
-**When to use:**
-- Grep `action_items` for the user's name to surface commitments made in meetings
-- Grep `topics` for AI-related terms (`GSD`, `Claude`, `skill`, `agentic`) for AI adoption wins
-- Use participant list + meeting_type to reconstruct "met with X about Y" context when Slack/Jira is thin
-
-**Grep patterns:**
-```
-# Adrian's action items across all transcripts in window
-grep -l "Adrian:" ~/Projects/Mgmt\ Assistant/transcripts/YYYY-MM-DD_*.md
-
-# AI-topic meetings
-grep -l "GSD\|Claude\|agentic\|skill" in frontmatter topics field
-```
-
-Read the frontmatter only for signal-gathering; read the full body only if you need to quote or verify a specific claim.
+Frontmatter fields: `date`, `participants`, `meeting_type`, `topics`, `action_items` (`"owner: task"` strings). Read frontmatter for triage; read full body only to verify or quote.
 
 ## Parallelization
 
-All six sources are independent within a window. Fire them in one batched message when possible. Cache raw JSON under `${XDG_CACHE_HOME:-$HOME/.cache}/ai-weekly-update/<pageId>/<YYYY-MM-DD>/` so re-runs don't re-query. Cache is deleted on successful publish.
+All seven sources are independent within a window. Fire them in one batched message when possible. Cache raw JSON under `${XDG_CACHE_HOME:-$HOME/.cache}/ai-weekly-update/<pageId>/<YYYY-MM-DD>/` so re-runs don't re-query. Cache is deleted on successful publish.
 
 ## Attribution discipline
 

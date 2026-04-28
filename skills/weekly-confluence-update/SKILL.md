@@ -54,6 +54,7 @@ The invoking environment must have these MCP servers connected:
 - Atlassian (Confluence + Jira) — for page read/write and Jira search
 - Slack — for `slack_search_public` (and `slack_search_public_and_private` if available)
 - Outlook / M365 — for `outlook_email_search`
+- Zoom — for meeting transcripts and summaries via AI Companion (`search_meetings`, `get_meeting_assets`)
 
 If any are missing, the skill still runs. After delivering the preview, follow `_shared/missing-sources.md` to append a **More signal available** note for any source that couldn't run or had no config.
 
@@ -173,7 +174,7 @@ If the title has no parseable range, ask the user for start and end dates before
 **Side effects:** read-only external searches (`searchJiraIssuesUsingJql`, Slack search, `outlook_email_search`, `gh search prs` if configured). Writes a local research cache under `${XDG_CACHE_HOME:-$HOME/.cache}/weekly-confluence-update/<pageId>/<YYYY-MM-DD>/` so re-runs skip the API calls. Nothing published anywhere.
 
 **Before starting, announce which sources you'll hit and any per-run opt-ins.** Example:
-> Researching Apr 06–10. Sources: Jira (team+label), Slack (public + **private** per team config), Outlook, GitHub (orgs: `puppetlabs`). Reply `public only` to downgrade Slack this run.
+> Researching Apr 06–10. Sources: Jira (team+label), Slack (public + **private** per team config), Outlook, GitHub (orgs: `puppetlabs`), Zoom (meeting transcripts + summaries). Reply `public only` to downgrade Slack this run.
 
 For each section the user owns, gather evidence from the four sources for the date range, scoped to the topics requested in that section's prompt. Full query patterns live in `references/data-sources.md`. Summary:
 
@@ -237,7 +238,7 @@ Run `scripts/render_preview.py <modified-adf.json> --title "<page title>" --out 
 
 Tell the user: "Preview opened at `<path>`. Review the yellow-highlighted additions. Reply `approve`, `edit <section>: <change>`, or `cancel`."
 
-**Missing-sources check.** After delivering the preview prompt, follow `_shared/missing-sources.md`: check which of the seven sources (Zoom transcripts, Jira, Slack public, Slack private, Outlook, GitHub, Claude Code logs) were skipped or errored during Phase 4. If any were, append the **More signal available** note at the end of your message — after the approve/edit/cancel options, never before.
+**Missing-sources check.** After delivering the preview prompt, follow `_shared/missing-sources.md`: check which of the seven sources (Zoom, Jira, Slack public, Slack private, Outlook, GitHub, Claude Code logs) were skipped or errored during Phase 4. If any were, append the **More signal available** note at the end of your message — after the approve/edit/cancel options, never before.
 
 ### Phase 8 — Publish on approval
 

@@ -50,6 +50,7 @@ No team parameter — this skill is per-individual. If the invocation is `init a
 - Atlassian MCP (Confluence + Jira)
 - Slack MCP
 - Outlook / M365 MCP
+- Zoom MCP (for meeting transcripts and summaries via AI Companion)
 - `gh` CLI (authenticated with `repo` scope)
 - Read access to `~/.claude/projects/` on the local machine
 
@@ -130,7 +131,7 @@ Extract from the page title (e.g. `AI Weekly Report for 14 Apr - 18 Apr 2026`) v
 **Side effects:** read-only across all sources. Writes `${XDG_CACHE_HOME:-$HOME/.cache}/ai-weekly-update/<pageId>/<YYYY-MM-DD>/` locally.
 
 **Announce sources up front, explicitly calling out team fan-out if present:**
-> Researching <window>. Sources: Jira (AI labels/keywords, you + team members <names if any>), Slack (**public + private** per config, you + team), Outlook (AI keywords, your inbox only), GitHub (PRs + commits in orgs: <orgs>, you + team), Claude Code logs (your local `~/.claude/projects/` only). Reply `public only` to downgrade Slack this run. Reply `no team` to run personal-only this run.
+> Researching <window>. Sources: Jira (AI labels/keywords, you + team members <names if any>), Slack (**public + private** per config, you + team), Outlook (AI keywords, your inbox only), GitHub (PRs + commits in orgs: <orgs>, you + team), Zoom (meeting transcripts + summaries via AI Companion), Claude Code logs (your local `~/.claude/projects/` only). Reply `public only` to downgrade Slack this run. Reply `no team` to run personal-only this run.
 
 Run these in parallel; cache results under `${XDG_CACHE_HOME:-$HOME/.cache}/ai-weekly-update/<pageId>/<YYYY-MM-DD>/`.
 
@@ -231,7 +232,7 @@ scripts/render_preview.py <modified-adf.json> --title "<page title>" --out /tmp/
 
 Tell the user: preview path + `approve` / `edit <column>: <change>` / `cancel`.
 
-**Missing-sources check.** After delivering the preview prompt, follow `_shared/missing-sources.md`: check which of the seven sources (Zoom transcripts, Jira, Slack public, Slack private, Outlook, GitHub, Claude Code logs) were skipped or errored during Phase 4. If any were, append the **More signal available** note at the end of your message — after the approve/edit/cancel options, never before.
+**Missing-sources check.** After delivering the preview prompt, follow `_shared/missing-sources.md`: check which of the seven sources (Zoom, Jira, Slack public, Slack private, Outlook, GitHub, Claude Code logs) were skipped or errored during Phase 4. If any were, append the **More signal available** note at the end of your message — after the approve/edit/cancel options, never before.
 
 ### Phase 8 — Publish on approval
 

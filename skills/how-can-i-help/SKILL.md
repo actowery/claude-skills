@@ -25,7 +25,7 @@ On first run, if no config exists, Phase 0 bootstraps from `$XDG_CONFIG_HOME/ai-
 | Write `$XDG_CONFIG_HOME/how-can-i-help/user.json` | Local | Phase 0 init — path announced first |
 | Write `/tmp/how-can-i-help-<date>.md` | Local | Phase 5 |
 | Write research cache under `$XDG_CACHE_HOME/how-can-i-help/` | Local | Phase 2 |
-| Read Jira / Slack / Outlook / GitHub | Remote reads only | Phase 2 |
+| Read Jira / Slack / Outlook / GitHub / Zoom | Remote reads only | Phase 2 |
 | Send any message, reply to any email, comment on any ticket | **Never — informational skill, user takes all actions themselves** | — |
 | Suggest actions targeting people outside the user's configured team or immediate collaborators | Avoid unless the signal is directly tied to the team | — |
 
@@ -75,7 +75,7 @@ Staleness thresholds determine "is this item stale enough to count" — items fr
 **Side effects:** read-only external searches. Writes candidates JSON + raw responses under `$XDG_CACHE_HOME/how-can-i-help/<date>/`.
 
 Announce sources up front:
-> Scanning past <window> for stale items. Sources: Jira (team assignees + watchers, >14d untouched), Slack (public + private per config, threads silent >7d), Outlook (inbound customer + external, no reply >5d), GitHub (team PRs + reviews waiting >7d). Pulling candidates now.
+> Scanning past <window> for stale items. Sources: Jira (team assignees + watchers, >14d untouched), Slack (public + private per config, threads silent >7d), Outlook (inbound customer + external, no reply >5d), GitHub (team PRs + reviews waiting >7d), Zoom (meeting transcripts for untracked verbal commitments). Pulling candidates now.
 
 Fire queries in parallel. For each source, the scan is **biased toward silence**:
 
@@ -103,7 +103,14 @@ Fire queries in parallel. For each source, the scan is **biased toward silence**
 - Team members' open PRs with no activity > N days (`--state open --include-team`)
 - PRs where the user or team member was assigned as reviewer and haven't reviewed
 
-**Do not pull** fresh/active items. If Slack/Jira/PR/email touched within the freshness threshold, skip it — the whole point of this skill is to find what you don't already know about.
+**Zoom.** Via `search_meetings` + `get_meeting_assets`:
+- Find all meetings in the scan window
+- For each, check `meeting_summary.next_steps` and `my_notes.transcript` for verbal commitments (action-item language: "I'll", "you'll", "can you", "by next week")
+- Cross-reference against Jira tickets and Slack threads — a commitment with no downstream artifact is a crack candidate
+- `meeting_type` 1:1 meetings are the highest signal: they're personal commitments that are especially easy to forget
+- Apply the same staleness filter: skip meetings fresher than `jira_comment_unanswered_days` — you already know about those
+
+**Do not pull** fresh/active items. If Slack/Jira/PR/email/meeting touched within the freshness threshold, skip it — the whole point of this skill is to find what you don't already know about.
 
 ### Phase 3 — Score and select top items
 
@@ -151,7 +158,7 @@ Print the brief inline as the primary delivery. Write the markdown file as refer
 
 No approval gate. This skill is informational — the user takes whatever actions they choose without the skill writing anything remote.
 
-**Missing-sources check.** After printing the brief inline, follow `_shared/missing-sources.md`: check which of the seven sources (Zoom transcripts, Jira, Slack public, Slack private, Outlook, GitHub, Claude Code logs) were skipped or errored during Phase 2. If any were, append the **More signal available** note at the end of the brief — never before it.
+**Missing-sources check.** After printing the brief inline, follow `_shared/missing-sources.md`: check which of the seven sources (Zoom, Jira, Slack public, Slack private, Outlook, GitHub, Claude Code logs) were skipped or errored during Phase 2. If any were, append the **More signal available** note at the end of the brief — never before it.
 
 ## Safety rules
 

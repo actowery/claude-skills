@@ -111,26 +111,48 @@ Good use:
 Bad use:
 > We made 221 `Bash` tool calls, 147 `Read` calls, and invoked `anthropic-skills:skill-creator` four times.
 
-## Local meeting transcripts
+## Zoom meetings
 
-Zoom AI transcripts saved to `~/Projects/Mgmt Assistant/transcripts/` as markdown files with YAML frontmatter. Useful in this skill for surfacing **cross-team collaboration, commitments made to leadership, and escalations discussed verbally** that may not appear in Jira/Slack yet.
+Zoom AI Companion transcripts and summaries are available directly via the Zoom MCP. This is the **primary source** for surfacing cross-team collaboration, leadership commitments, and escalations discussed verbally that haven't landed in Jira/Slack yet.
 
-**Finding files in the date window:**
+### Primary: Zoom MCP
+
+**Step 1 — Find meetings in the window:**
+```
+search_meetings(
+  from: "<start>T00:00:00Z",
+  to:   "<end>T23:59:59Z"
+)
+```
+Note the `meeting_uuid` for each result. Prefer UUID over numeric `meeting_number` for recurring meetings.
+
+**Step 2 — Pull assets per meeting:**
+```
+get_meeting_assets(meetingId: "<meeting_uuid>")
+```
+Key fields:
+- `my_notes.transcript.transcript_items[]` — speaker-labeled transcript
+- `meeting_summary` — AI-generated quick recap and next steps
+- `participants` — attendee list (use to identify VP/director/cross-team presence)
+
+**When to use in exec context:**
+- `participants` including VP, director, or cross-team names → leadership touchpoints worth surfacing
+- `meeting_summary.next_steps` → concrete commitments that can anchor an exec email paragraph
+- `my_notes.transcript` → verify or quote a specific claim; don't fabricate from summaries alone
+
+**Access note:** `has_transcript_permission: false` in search results can be misleading — call `get_meeting_assets` for any meeting you hosted regardless of that flag.
+
+### Fallback: local transcript files
+
+If Zoom MCP is unreachable, or for meetings predating the integration, check local files:
 ```
 Glob: ~/Projects/Mgmt Assistant/transcripts/YYYY-MM-DD_*.md
 ```
-Frontmatter fields: `date`, `participants`, `meeting_type` (`1on1`, `team`, `stakeholder`), `topics`, `action_items` (`"owner: task"` strings).
-
-**When to use:**
-- `action_items` where owner is Adrian or a team member → concrete deliverables/commitments
-- `meeting_type: stakeholder` or participants including VP/director names → cross-team or leadership touchpoints worth surfacing in an exec report
-- `topics` matching AI terms → additional AI adoption evidence beyond GitHub/Jira
-
-Read frontmatter only for signal-gathering; read full body only to verify or quote a specific claim. Never fabricate a meeting detail that isn't in the transcript.
+Frontmatter fields: `date`, `participants`, `meeting_type` (`1on1`, `team`, `stakeholder`), `topics`, `action_items`. Read frontmatter for triage; read full body only to verify or quote.
 
 ## Parallelization and caching
 
-Fire all five sources in parallel. Cache under `${XDG_CACHE_HOME:-$HOME/.cache}/ai-exec-report/<date>/` keyed by source. Re-runs within the same day reuse the cache. Cache is disposable.
+Fire all six sources in parallel. Cache under `${XDG_CACHE_HOME:-$HOME/.cache}/ai-exec-report/<date>/` keyed by source. Re-runs within the same day reuse the cache. Cache is disposable.
 
 ## Selecting from the research output
 

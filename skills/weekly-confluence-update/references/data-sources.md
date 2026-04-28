@@ -147,22 +147,44 @@ Run at least twice per section: once with `--state merged` (shipped work) and on
 
 Useful subject patterns to surface: `"[RELEASE]"`, `"Post-mortem"`, `"Escalation"`, customer names from prior weeks. Skip newsletters and auto-digests.
 
-## Local meeting transcripts
+## Zoom meetings
 
-Zoom AI transcripts saved to `~/Projects/Mgmt Assistant/transcripts/` as markdown files with YAML frontmatter. Use as a **supplementary source** when Jira/Slack/Outlook research is thin, or to find in-meeting decisions that never made it into a ticket.
+Zoom AI Companion transcripts and summaries are available directly via the Zoom MCP. Use as a **supplementary source** when Jira/Slack/Outlook research is thin, or to find in-meeting decisions that never made it into a ticket.
 
-**Finding files in the date window:**
+### Primary: Zoom MCP
+
+**Step 1 — Find meetings in the window:**
+```
+search_meetings(
+  from: "<start>T00:00:00Z",
+  to:   "<end>T23:59:59Z"
+)
+```
+Note the `meeting_uuid` for each result. Prefer UUID over numeric `meeting_number` for recurring meetings.
+
+**Step 2 — Pull assets per meeting:**
+```
+get_meeting_assets(meetingId: "<meeting_uuid>")
+```
+Key fields:
+- `my_notes.transcript.transcript_items[]` — speaker-labeled transcript
+- `meeting_summary` — AI-generated quick recap and next steps
+- `participants` — attendee list
+
+**When to use:**
+- `meeting_summary.next_steps` or transcript action-item language → progress/blockers for the weekly update row
+- `meeting_type` team meetings → standup/grooming context
+- `topics` matching section subject areas — team decisions, process changes, releases discussed
+
+**Access note:** `has_transcript_permission: false` in search results can be misleading — call `get_meeting_assets` for any meeting you hosted regardless of that flag.
+
+### Fallback: local transcript files
+
+If Zoom MCP is unreachable, or for meetings predating the integration, check local files:
 ```
 Glob: ~/Projects/Mgmt Assistant/transcripts/YYYY-MM-DD_*.md
 ```
-Frontmatter fields: `date`, `participants`, `meeting_type`, `topics`, `action_items` (`"owner: task"` strings).
-
-**When to use:**
-- `action_items` where owner is the current user → progress/blockers that belong in the weekly update row
-- `topics` for matching the section's subject areas (team decisions, process changes, releases discussed)
-- `meeting_type: team` transcripts → standup/grooming context for team rows
-
-Read frontmatter for triage; read full body only to extract a specific quote or verify a claim.
+Frontmatter fields: `date`, `participants`, `meeting_type`, `topics`, `action_items`. Read frontmatter for triage; read full body only to extract a specific quote or verify a claim.
 
 ## Parallelization & caching
 

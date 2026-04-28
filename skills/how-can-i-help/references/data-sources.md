@@ -147,22 +147,46 @@ PRs with `requestedReviewers` non-empty and no `reviews` in the window are the c
 
 `scripts/scan_claude_logs.py --start <N days ago>` gives per-day session counts across projects. If you want to infer "quiet for the team" vs "quiet for just one person," compare this (your own usage) against no-signal from teammates elsewhere. Only useful as a weak secondary signal for the gone-quiet category.
 
-## Local meeting transcripts
+## Zoom meetings
 
-Zoom AI transcripts saved to `~/Projects/Mgmt Assistant/transcripts/` as markdown files with YAML frontmatter. In this skill, transcripts are a **high-signal source for dropped commitments** — action items verbally agreed to in meetings that never appeared in Jira.
+Zoom AI Companion transcripts and summaries are available directly via the Zoom MCP. In this skill, meeting transcripts are a **high-signal source for dropped commitments** — action items verbally agreed to in meetings that never appeared in Jira.
 
-**Finding files in the scan window:**
+### Primary: Zoom MCP
+
+**Step 1 — Find meetings in the scan window:**
+```
+search_meetings(
+  from: "<scan_start>T00:00:00Z",
+  to:   "<today>T23:59:59Z"
+)
+```
+Note the `meeting_uuid` for each result. Prefer UUID over numeric `meeting_number` for recurring meetings.
+
+**Step 2 — Pull assets per meeting:**
+```
+get_meeting_assets(meetingId: "<meeting_uuid>")
+```
+Key fields:
+- `my_notes.transcript.transcript_items[]` — speaker-labeled transcript; scan for task language ("I'll", "you'll", "by next week", "can you", "I'll take care of")
+- `meeting_summary.next_steps` — AI-extracted action items (faster scan; verify against transcript if used in the brief)
+- `participants` — who was in the room
+
+**What makes a crack in meeting context:**
+- A commitment made by Adrian or a team member in a 1:1 (`meeting_type` + two attendees) with no downstream Jira ticket or Slack thread
+- An ask from Adrian to a team member with no evidence of follow-through in Jira/Slack since
+- 1:1 commitments are especially high-signal — they're personal, not tracked in tickets, and easy to forget
+
+Treat an untracked verbal commitment the same priority as a buried @-mention — it's a real ask that fell through.
+
+**Access note:** `has_transcript_permission: false` in search results can be misleading — call `get_meeting_assets` for any meeting you hosted regardless of that flag.
+
+### Fallback: local transcript files
+
+If Zoom MCP is unreachable, or for meetings predating the integration, check local files:
 ```
 Glob: ~/Projects/Mgmt Assistant/transcripts/YYYY-MM-DD_*.md
 ```
-Frontmatter fields: `date`, `participants`, `meeting_type`, `topics`, `action_items` (`"owner: task"` strings).
-
-**When to use:**
-- Grep `action_items` for Adrian's name → commitments he made verbally; cross-check against Jira to see if a ticket was ever created. If not, it's a crack candidate.
-- `action_items` for team member names → things Adrian asked someone to do; cross-check Slack/Jira for follow-through. Silence is a crack.
-- `meeting_type: 1on1` transcripts → 1:1 commitments are especially high-signal because they're personal, not tracked in tickets.
-
-Treat a transcript action item with no downstream Jira ticket or Slack thread as the same priority as a buried @-mention — it's a real ask that fell through.
+Frontmatter `action_items` field is pre-extracted — faster than reading full transcripts. Read full body only to verify a specific claim.
 
 ## Source prioritization during Phase 3 scoring
 

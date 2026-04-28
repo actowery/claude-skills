@@ -35,6 +35,7 @@ Paths live outside the skill install dir so plugin upgrades can't wipe your boss
 - Atlassian MCP (Jira for signal)
 - Slack MCP (for team discussion signal)
 - Outlook / M365 MCP (for research, not for sending)
+- Zoom MCP (for meeting transcripts and summaries via AI Companion)
 - `gh` CLI authenticated with `repo` scope
 - Read access to `~/.claude/projects/` for local session scan
 - A default mail client on the OS that handles `.eml` files (macOS Mail.app, Outlook, etc.)
@@ -73,7 +74,7 @@ Do not invent values. Boss's email is the only truly required field.
 **Side effects:** read-only external searches (Jira, Slack, Outlook, GitHub, local Claude logs). Writes research cache under `${XDG_CACHE_HOME:-$HOME/.cache}/ai-exec-report/<YYYY-MM-DD>/`.
 
 Announce sources up front. Example:
-> Researching <window>. Sources: Jira (AI labels + team assignees), Slack (public + private per config), Outlook (AI keywords, your inbox only), GitHub (team PRs + commits in orgs: <orgs>), Claude Code logs (your local only). Reply `public only` to downgrade Slack this run.
+> Researching <window>. Sources: Jira (AI labels + team assignees), Slack (public + private per config), Outlook (AI keywords, your inbox only), GitHub (team PRs + commits in orgs: <orgs>), Zoom (meeting transcripts + summaries via AI Companion), Claude Code logs (your local only). Reply `public only` to downgrade Slack this run.
 
 Fire queries in parallel. Same patterns as `ai-weekly-update` — see `references/data-sources.md` for specifics. Key differences:
 
@@ -137,7 +138,7 @@ Tell the user:
 > Reply `edit <section>: <change>` to rewrite that section (I'll close the current draft and open a revised one).
 > Reply `cancel` to discard the Outlook draft and delete the local files.
 
-**Missing-sources check.** After delivering the above prompt, follow `_shared/missing-sources.md`: check which of the seven sources (Zoom transcripts, Jira, Slack public, Slack private, Outlook, GitHub, Claude Code logs) were skipped or errored during Phase 2. If any were, append the **More signal available** note at the end of your message — after the approve/edit/cancel options, never before.
+**Missing-sources check.** After delivering the above prompt, follow `_shared/missing-sources.md`: check which of the seven sources (Zoom, Jira, Slack public, Slack private, Outlook, GitHub, Claude Code logs) were skipped or errored during Phase 2. If any were, append the **More signal available** note at the end of your message — after the approve/edit/cancel options, never before.
 
 ### Phase 6 — Finalize on approval
 
