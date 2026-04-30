@@ -1,0 +1,9 @@
+{
+  "_comment": "Copy to ~/.config/zoom-transcript-sync/user.json and fill in your values. transcript_dir comes from the shared workspace config (~/.config/claude-skills/workspace.json), not here.",
+  "email": "you@company.com",
+  "scan_window_days": 14,
+  "_last_successful_scan_note": "Written automatically after each run. Delete to force a full scan_window_days lookback.",
+  "last_successful_scan": null,
+  "cached_at": "YYYY-MM-DD",
+  "cache_source": "user_confirmed"
+}

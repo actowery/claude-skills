@@ -149,7 +149,7 @@ Key fields:
 
 If Zoom MCP is unreachable, or for meetings predating the integration, check local files:
 ```
-Glob: ~/Projects/Mgmt Assistant/transcripts/YYYY-MM-DD_*.md
+Glob: ~/Projects/Mgmt-Assistant/transcripts/YYYY-MM-DD_*.md
 ```
 Frontmatter fields: `date`, `participants`, `meeting_type` (`1on1`, `team`, `stakeholder`), `topics`, `action_items`. Read frontmatter for triage; read full body only to verify or quote.
 

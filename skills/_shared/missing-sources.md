@@ -46,7 +46,7 @@ Check each of these at the end of the research phase. Flag any that were skipped
 
 ## What "missing" means per source
 
-- **Zoom**: Zoom MCP call throws or returns a connection error; OR `search_meetings` returns zero meetings in the window with `has_transcript_permission: true` or `has_summary_permission: true`, AND no local `.md` fallback files exist in `~/Projects/Mgmt Assistant/transcripts/` for the window.
+- **Zoom**: Zoom MCP call throws or returns a connection error; OR `search_meetings` returns zero meetings in the window with `has_transcript_permission: true` or `has_summary_permission: true`, AND no local `.md` fallback files exist in `~/Projects/Mgmt-Assistant/transcripts/` for the window.
 - **Jira**: MCP call throws or returns a connection error; OR config has no `atlassian_account_id`.
 - **Slack (public)**: MCP call throws or returns a connection error; OR config has no `slack_user_id`.
 - **Slack (private)**: `slack_search_mode` is not `"public_and_private"` in config.

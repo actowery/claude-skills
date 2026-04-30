@@ -187,7 +187,7 @@ Treat an untracked verbal commitment the same priority as a buried @-mention —
 
 If Zoom MCP is unreachable, or for meetings predating the integration, check local files:
 ```
-Glob: ~/Projects/Mgmt Assistant/transcripts/YYYY-MM-DD_*.md
+Glob: ~/Projects/Mgmt-Assistant/transcripts/YYYY-MM-DD_*.md
 ```
 Frontmatter `action_items` field is pre-extracted — faster than reading full transcripts. Read full body only to verify a specific claim.
 

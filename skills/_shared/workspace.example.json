@@ -1,0 +1,8 @@
+{
+  "_comment": "Copy this file to ~/.config/claude-skills/workspace.json and fill in your paths. All fields are optional — any field you omit falls back to the current working directory.",
+  "workspace_dir": "/path/to/your/workspace",
+  "transcript_dir": "/path/to/your/workspace/transcripts",
+  "prep_output_dir": "/path/to/your/workspace/1on1-preps",
+  "cached_at": "YYYY-MM-DD",
+  "cache_source": "user_confirmed"
+}

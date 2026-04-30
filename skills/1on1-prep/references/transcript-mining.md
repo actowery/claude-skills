@@ -7,7 +7,7 @@ The killer feature of this skill is mining the previous 1:1's transcript for thi
 The prior 1:1 transcript can come from two places:
 
 1. **Zoom MCP** — `get_meeting_assets` returns `my_notes.transcript.transcript_items[]` with speaker labels and timestamps, plus `meeting_summary.next_steps` (when AI Companion was running and produced a summary)
-2. **Local transcript files** — `~/Projects/Mgmt Assistant/transcripts/<YYYY-MM-DD>_*.md` with YAML frontmatter (`action_items: ["owner: task"]` field is pre-extracted)
+2. **Local transcript files** — `~/Projects/Mgmt-Assistant/transcripts/<YYYY-MM-DD>_*.md` with YAML frontmatter (`action_items: ["owner: task"]` field is pre-extracted)
 
 If both exist for the same meeting, prefer the Zoom source — it's more detailed and includes the AI-extracted next steps. Fall back to local frontmatter `action_items` if Zoom is unavailable.
 

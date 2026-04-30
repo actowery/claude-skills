@@ -25,7 +25,7 @@ On first run, if no config exists, Phase 0 bootstraps from `$XDG_CONFIG_HOME/ai-
 | Action | Scope | When |
 |---|---|---|
 | Write `$XDG_CONFIG_HOME/1on1-prep/user.json` | Local | Phase 0 init — path announced first |
-| Write `<prep_output_dir>/1on1-prep-<person>-<date>.md` (gitignored, default `~/Projects/Mgmt Assistant/1on1-preps`) | Local | Phase 5 |
+| Write `<prep_output_dir>/1on1-prep-<person>-<date>.md` (default from workspace config, or CWD) | Local | Phase 5 |
 | Write research cache under `$XDG_CACHE_HOME/1on1-prep/` | Local | Phase 3 |
 | Read Jira / Slack / Outlook / GitHub / Zoom | Remote reads only | Phase 3 |
 | Read Outlook calendar (only for `1on1` / `1on1 next` invocations) | Remote read only | Phase 1 |
@@ -70,7 +70,7 @@ Optional second argument: an explicit date window (`since 2026-04-21`, `past mon
 4. **Manager** — ask for the user's own manager: display name, email, Atlassian/Slack IDs. Set `relationship: "manager"`. Stored in `manager` field, NOT in `team.members[]`.
 5. **Peers** — optional list of peer managers, cross-team collaborators, skip-levels the user has regular 1:1s with. For each, set `relationship: "peer"`. Stored in `peers[]`.
 6. **Pronouns** (optional but recommended) — for each person (team members, manager, peers), capture pronouns if known (`he/him`, `she/her`, `they/them`). Field is `pronouns` on each person record. **If pronouns are not set, the brief MUST use the person's name only and never gendered pronouns.** Don't guess from name — names are not reliable signals.
-6. Confirm `transcript_dir` (default `~/Projects/Mgmt Assistant/transcripts`).
+6. Confirm `transcript_dir` (default from workspace config `~/.config/claude-skills/workspace.json`, or CWD if not configured — see `_shared/workspace-config.md`).
 7. Threshold defaults — see config schema below.
 8. Announce the XDG path, then write `user.json`. Create parent dirs.
 
@@ -203,9 +203,21 @@ Use for `peers[]` people. Lighter than direct report, no growth topics, no upwar
 
 **Side effects:** writes `<prep_output_dir>/1on1-prep-<person-slug>-<YYYY-MM-DD>.md` via `scripts/render_brief.py`; prints the brief inline.
 
-Output directory: `prep_output_dir` from `user.json` (default: `~/Projects/Mgmt Assistant/1on1-preps`). This directory is gitignored — preps persist across sessions for easy reference but are never committed. Fall back to `/tmp/` only if `prep_output_dir` is not set and the directory cannot be created.
+Output directory: resolve `prep_output_dir` in this order: (1) `prep_output_dir` from skill `user.json`, (2) `prep_output_dir` from workspace config (`~/.config/claude-skills/workspace.json`), (3) `<workspace_dir>/1on1-preps` if `workspace_dir` is set in workspace config, (4) current working directory. Fall back to `/tmp/` only if none of the above produce a usable path. See `_shared/workspace-config.md`. Preps persist across sessions for easy reference but are never committed to any repo.
 
 Print the brief inline as the primary delivery. The markdown file is for reference during the meeting itself and for future prep runs (prior preps can be used as additional context when re-prepping the same person).
+
+After saving the brief to `prep_output_dir`, also copy it to `/tmp/<filename>` and output a clickable sidebar link. The `/tmp/` copy is required because `prep_output_dir` contains spaces which break the link format.
+
+Copy command: `cp "<prep_output_dir>/1on1-prep-<slug>-<date>.md" /tmp/1on1-prep-<slug>-<date>.md`
+
+Then output the link using this exact format — full path as BOTH the display text and the href:
+
+```
+[/tmp/1on1-prep-<slug>-<date>.md](/tmp/1on1-prep-<slug>-<date>.md)
+```
+
+This is the last line of output before any missing-sources note.
 
 No approval gate. The user reads, takes whatever notes they want into the meeting, and the skill is done.
 
@@ -268,8 +280,9 @@ No approval gate. The user reads, takes whatever notes they want into the meetin
 
   "github": {"orgs": ["your-org"]},
   "slack_search_mode": "public",
-  "transcript_dir": "~/Projects/Mgmt Assistant/transcripts",
-  "prep_output_dir": "~/Projects/Mgmt Assistant/1on1-preps",
+  "transcript_dir": null,
+  "prep_output_dir": null,
+  "_path_note": "Leave transcript_dir and prep_output_dir null to inherit from ~/.config/claude-skills/workspace.json (see _shared/workspace-config.md). Set them here only to override the workspace default for this skill.",
 
   "prep_defaults": {
     "fallback_window_days": 14,

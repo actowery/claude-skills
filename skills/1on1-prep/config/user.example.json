@@ -43,7 +43,7 @@
 
   "github": {"orgs": ["your-org"]},
   "slack_search_mode": "public",
-  "transcript_dir": "~/Projects/Mgmt Assistant/transcripts",
+  "transcript_dir": "~/Projects/Mgmt-Assistant/transcripts",
 
   "prep_defaults": {
     "fallback_window_days": 14,

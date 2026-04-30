@@ -2,7 +2,7 @@
 """
 Render a 1:1 prep brief from a structured JSON document to a markdown file.
 Output directory is resolved from user.json's `prep_output_dir` field
-(default: ~/Projects/Mgmt Assistant/1on1-preps), falling back to /tmp/.
+(default: ~/Projects/Mgmt-Assistant/1on1-preps), falling back to /tmp/.
 The skill's model produces the JSON during Phase 4; this script lays it out
 consistently so the same brief format comes out every run.
 
@@ -50,7 +50,7 @@ import sys
 from pathlib import Path
 
 
-DEFAULT_PREP_OUTPUT_DIR = "~/Projects/Mgmt Assistant/1on1-preps"
+DEFAULT_PREP_OUTPUT_DIR = "~/Projects/Mgmt-Assistant/1on1-preps"
 DEFAULT_USER_CONFIG = "~/.config/1on1-prep/user.json"
 
 

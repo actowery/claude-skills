@@ -10,8 +10,9 @@ A collection of Claude Code skills I build and maintain. One repo, one CI pipeli
 | [`ai-weekly-update`](skills/ai-weekly-update/) | Drafts an individual row on a shared AI-usage weekly report (Champion/Manager tables). Matches by plain-text name. 5 signal sources including local Claude Code session scanning. Manager-mode weaves team wins alongside personal wins; self-reporting rule skips teammates with their own row. |
 | [`ai-exec-report`](skills/ai-exec-report/) | Drafts a weekly upward-communication **email** from a manager to their manager, reporting the team's AI adoption in upper-mgmt language. Hype-but-honest tone with a non-negotiable blockers section. Skill never sends mail — renders an HTML preview + `.eml` draft file that opens in your default mail client with To/Subject/Body pre-filled. |
 | [`how-can-i-help`](skills/how-can-i-help/) | Crack-finder. Scans Jira / Slack / Outlook / GitHub for stale, silent, forgotten items — the stuff that fell through the cracks because nobody's actively chasing it. Returns a short honest brief (up to 3) with description, psychology of why help matters, business benefit, and a specific low-effort management action. Read-only; informational; no approval gate. |
+| [`zoom-transcript-sync`](skills/zoom-transcript-sync/) | Scans Zoom AI Companion My Notes (dictation) for a configurable date window, deduplicates against transcripts already saved locally, and writes new ones as structured markdown files with YAML frontmatter. One-way pull from Zoom — never writes back. Uses the shared workspace config for the output directory so no paths are hardcoded. |
 
-Each skill has its own `README.md`, `SKILL.md`, and `tests/`. Start with the subdirectory `README.md`.
+Each skill has its own `SKILL.md` (and most have a `README.md`) and `tests/`. Start with the subdirectory `SKILL.md`.
 
 ## Installing one skill
 
@@ -55,6 +56,16 @@ CI runs every skill's smoke test via a matrix strategy, so adding a new skill co
 ## Config & cache philosophy
 
 Skills write user state to `${XDG_CONFIG_HOME:-$HOME/.config}/<skill-name>/` and research caches to `${XDG_CACHE_HOME:-$HOME/.cache}/<skill-name>/` — never to the skill install directory. This keeps user state safe across upgrades and out of git.
+
+### Shared workspace config
+
+Skills that read from or write to local directories (transcript files, prep briefs) resolve those paths through a shared workspace config at:
+
+```
+${XDG_CONFIG_HOME:-$HOME/.config}/claude-skills/workspace.json
+```
+
+Copy `skills/_shared/workspace.example.json` to that path and fill in your directories. If the file is absent, each skill falls back to the current working directory — so the skills work out of the box without any configuration. See `skills/_shared/workspace-config.md` for the full schema and resolution order.
 
 ## License
 
