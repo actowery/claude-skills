@@ -1,0 +1,28 @@
+{
+  "_comment": "This skill reuses the action-item-sync user.json config at $XDG_CONFIG_HOME/action-item-sync/user.json.",
+  "_comment2": "Run `action-item-sync init` to create that config. No separate config file is needed for perf-review-draft.",
+  "_comment3": "Workspace config (transcript_dir) comes from $XDG_CONFIG_HOME/claude-skills/workspace.json.",
+
+  "example_config_path": "${XDG_CONFIG_HOME:-$HOME/.config}/action-item-sync/user.json",
+
+  "example_structure": {
+    "display_name": "Adrian Towery",
+    "email": "adrian.towery@perforce.com",
+    "atlassian_account_id": "5aea344f23dd942d56d9667c",
+
+    "team": {
+      "name": "DevX",
+      "members": [
+        {
+          "display_name": "David Swan",
+          "atlassian_account_id": "557058:154e67dd-e474-47c6-b112-0111e3b9f3d8",
+          "slack_user_id": "U0412F1CPMG",
+          "github_username": "david22swan",
+          "email": "david.swan@perforce.com",
+          "pronouns": null,
+          "relationship": "direct_report"
+        }
+      ]
+    }
+  }
+}

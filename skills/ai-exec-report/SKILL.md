@@ -25,7 +25,6 @@ Paths live outside the skill install dir so plugin upgrades can't wipe your boss
 | Write `${XDG_CONFIG_HOME:-$HOME/.config}/ai-exec-report/user.json` | Local write | Phase 0 init — path announced first |
 | Write `/tmp/ai-exec-report-<date>.html` (preview) + `.eml` (draft file) | Local write | Phase 6 |
 | Write research cache under `${XDG_CACHE_HOME:-$HOME/.cache}/ai-exec-report/` | Local write | Phase 4 |
-| Run `open <path>` to launch browser for preview | Local | Phase 6 |
 | Read Jira / Slack / Outlook / GitHub / local Claude Code logs | Remote reads only | Phase 4 |
 | **Send an email** | **Never — handled by the user clicking Send in their mail client** | — |
 | Auto-CC anyone, skip-levels, or distribution lists beyond what the user configured | **Never** | — |
@@ -127,12 +126,10 @@ scripts/render_email.py \
     --push-to-outlook     # macOS + Outlook users — see note below
 ```
 
-Open the HTML preview with `open <path>`.
-
 **Outlook for Mac caveat.** Double-clicking a `.eml` file in Outlook for Mac opens it as a **read-only viewer**, ignoring the `X-Unsent: 1` header that marks it as a draft. There is no Send button in that viewer. The `--push-to-outlook` flag drives Outlook's AppleScript API directly to create a real draft window (with Send button) in the user's running Outlook instance. The `.eml` and HTML files are still written as a paper-trail backup but are not the primary delivery path. Always pass `--push-to-outlook` when the user's default mail client is Outlook for Mac. Apple Mail users can omit it (Mail.app handles the `.eml` draft correctly).
 
 Tell the user:
-> Draft opened in Outlook with Send button. Preview at `<html path>` for reference.
+> Draft opened in Outlook with Send button. HTML backup at `<html path>` if you need it.
 >
 > Reply `approve` — the draft stays open in Outlook; you click Send when ready.
 > Reply `edit <section>: <change>` to rewrite that section (I'll close the current draft and open a revised one).

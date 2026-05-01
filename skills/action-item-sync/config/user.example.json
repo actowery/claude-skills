@@ -1,0 +1,45 @@
+{
+  "_comment": "Template only. Generate your real user.json via `action-item-sync init` — do not hand-edit.",
+
+  "display_name": "Alex Example",
+  "email": "alex.example@company.com",
+  "atlassian_account_id": "712020:REPLACE",
+
+  "confluence_page_id": "REPLACE_WITH_PAGE_ID",
+  "confluence_page_url": "https://yourcompany.atlassian.net/wiki/spaces/~account/pages/REPLACE/Team+Action+Items",
+
+  "lookback_days": 7,
+  "last_run_date": null,
+
+  "meeting_types": [
+    {
+      "name": "1:1",
+      "title_keywords": ["1:1", "1on1", "1-on-1", "one on one", "one-on-one"]
+    },
+    {
+      "name": "Sprint Grooming",
+      "title_keywords": ["grooming", "backlog refinement", "refinement"]
+    },
+    {
+      "name": "Sprint Planning",
+      "title_keywords": ["sprint planning", "planning"]
+    }
+  ],
+
+  "team": {
+    "name": "Platform",
+    "members": [
+      {
+        "display_name": "Taylor Example",
+        "atlassian_account_id": "712020:REPLACE",
+        "slack_user_id": "U00REPLACE",
+        "email": "taylor.example@company.com",
+        "pronouns": "they/them",
+        "relationship": "direct_report"
+      }
+    ]
+  },
+
+  "cached_at": "YYYY-MM-DD",
+  "cache_source": "example_template"
+}
